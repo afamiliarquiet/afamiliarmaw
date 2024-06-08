@@ -1,0 +1,44 @@
+{
+	"schemaVersion": 1,
+	"id": "afamiliarmaw",
+	"version": "${version}",
+	"name": "afamiliarmaw",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Me!"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/afamiliarmaw/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+          "io.github.afamiliarquiet.AFamiliarMaw"
+		],
+		"client": [
+			"io.github.afamiliarquiet.AFamiliarMawClient"
+		],
+		"fabric-datagen": [
+			"io.github.afamiliarquiet.AFamiliarMawDataGenerator"
+		]
+	},
+	"mixins": [
+		"afamiliarmaw.mixins.json",
+		{
+			"config": "afamiliarmaw.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.15.11",
+		"minecraft": "~1.21-",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
