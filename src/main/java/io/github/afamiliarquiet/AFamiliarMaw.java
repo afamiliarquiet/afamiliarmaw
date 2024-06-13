@@ -1,5 +1,6 @@
 package io.github.afamiliarquiet;
 
+import io.github.afamiliarquiet.entity.MawEntities;
 import io.github.afamiliarquiet.network.MawPackets;
 import net.fabricmc.api.ModInitializer;
 
@@ -26,6 +27,7 @@ public class AFamiliarMaw implements ModInitializer {
 
 		MawPackets.registerC2SPayloads();
 		MawPackets.registerC2SReceivers();
+		MawEntities.register();
 
 		LOGGER.info("Hello Fabric world!");
 	}

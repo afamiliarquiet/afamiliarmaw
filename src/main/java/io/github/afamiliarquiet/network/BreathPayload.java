@@ -1,5 +1,6 @@
 package io.github.afamiliarquiet.network;
 
+import io.github.afamiliarquiet.entity.BreathProjectileEntity;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -37,13 +38,17 @@ public class BreathPayload implements CustomPayload {
         Vec3d roto = (new Vec3d(f, g, h)).normalize().add(random.nextTriangular(0.0, 0.0172275 * (double)uncertainty), random.nextTriangular(0.0, 0.0172275 * (double)uncertainty), random.nextTriangular(0.0, 0.0172275 * (double)uncertainty)).multiply((double)power);
         Vec3d sumOffset = roto.add(movement.x, player.isOnGround() ? 0.0 : movement.y, movement.z);
 
-        for (int i = 0; i < 5; i++) {
 
-            player.getServerWorld().spawnParticles(ParticleTypes.FLAME,
-                    pos.x + sumOffset.x, pos.y - 0.125 + sumOffset.y, pos.z + sumOffset.z,
-                    0,
-                    sumOffset.x, sumOffset.y, sumOffset.z, 1.0);
-        }
+        BreathProjectileEntity breathProjectileEntity = new BreathProjectileEntity(player, player.getServerWorld());
+        breathProjectileEntity.setVelocity(player, pitch, yaw, 0.0F, 0.5F, 13F);
+        player.getServerWorld().spawnEntity(breathProjectileEntity);
+//        for (int i = 0; i < 5; i++) {
+//
+//            player.getServerWorld().spawnParticles(ParticleTypes.FLAME,
+//                    pos.x + sumOffset.x, pos.y - 0.125 + sumOffset.y, pos.z + sumOffset.z,
+//                    0,
+//                    sumOffset.x, sumOffset.y, sumOffset.z, 1.0);
+//        }
     }
 
     public BreathPayload(Mode mode) {
