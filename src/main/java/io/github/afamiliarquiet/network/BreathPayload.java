@@ -1,15 +1,12 @@
 package io.github.afamiliarquiet.network;
 
+import io.github.afamiliarquiet.MawUtils;
 import io.github.afamiliarquiet.entity.BreathProjectileEntity;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
 
 import static io.github.afamiliarquiet.AFamiliarMaw.getNamespacedIdentifier;
 
@@ -25,23 +22,28 @@ public class BreathPayload implements CustomPayload {
 
     public static void receive(BreathPayload payload, ServerPlayNetworking.Context context) {
         ServerPlayerEntity player = context.player();
-        Random random = player.getRandom();
-        Vec3d pos = player.getEyePos();
-        Vec3d movement = player.getMovement();
-        float pitch = player.getPitch();
-        float yaw = player.getYaw();
-        float power = 0.2f;
-        float uncertainty = 13f;
-        float f = -MathHelper.sin(yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F);
-        float g = -MathHelper.sin((pitch) * 0.017453292F);
-        float h = MathHelper.cos(yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F);
-        Vec3d roto = (new Vec3d(f, g, h)).normalize().add(random.nextTriangular(0.0, 0.0172275 * (double)uncertainty), random.nextTriangular(0.0, 0.0172275 * (double)uncertainty), random.nextTriangular(0.0, 0.0172275 * (double)uncertainty)).multiply((double)power);
-        Vec3d sumOffset = roto.add(movement.x, player.isOnGround() ? 0.0 : movement.y, movement.z);
-
+        if (!MawUtils.canBreathe(player)) {
+            return;
+        }
 
         BreathProjectileEntity breathProjectileEntity = new BreathProjectileEntity(player, player.getServerWorld());
-        breathProjectileEntity.setVelocity(player, pitch, yaw, 0.0F, 0.5F, 13F);
+        breathProjectileEntity.setVelocity(player, player.getPitch(), player.getYaw(), 0.0F, 0.5F, 13F);
+        breathProjectileEntity.setPosition(breathProjectileEntity.getPos().add(0, -.1, 0));
         player.getServerWorld().spawnEntity(breathProjectileEntity);
+
+//        Random random = player.getRandom();
+//        Vec3d pos = player.getEyePos();
+//        Vec3d movement = player.getMovement();
+//        float pitch = player.getPitch();
+//        float yaw = player.getYaw();
+//        float power = 0.2f;
+//        float uncertainty = 13f;
+//        float f = -MathHelper.sin(yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F);
+//        float g = -MathHelper.sin((pitch) * 0.017453292F);
+//        float h = MathHelper.cos(yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F);
+//        Vec3d roto = (new Vec3d(f, g, h)).normalize().add(random.nextTriangular(0.0, 0.0172275 * (double)uncertainty), random.nextTriangular(0.0, 0.0172275 * (double)uncertainty), random.nextTriangular(0.0, 0.0172275 * (double)uncertainty)).multiply((double)power);
+//        Vec3d sumOffset = roto.add(movement.x, player.isOnGround() ? 0.0 : movement.y, movement.z);
+
 //        for (int i = 0; i < 5; i++) {
 //
 //            player.getServerWorld().spawnParticles(ParticleTypes.FLAME,

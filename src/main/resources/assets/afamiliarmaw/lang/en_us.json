@@ -1,4 +1,8 @@
 {
   "key.afamiliarmaw.breathe":  "Breathe",
-  "category.afamiliarmaw.maw": "Maw"
+  "category.afamiliarmaw.maw": "Maw",
+  "item.afamiliarmaw.pyretic_liquer": "Pyretic Liquer",
+  "effect.afamiliarmaw.pyrexia": "Pyrexia",
+  "tag.enchantment.afamiliarmaw.fiery_enchantments": "Fiery Enchantments",
+  "tag.item.afamiliarmaw.fiery_items": "Fiery Items"
 }

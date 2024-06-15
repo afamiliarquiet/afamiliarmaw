@@ -2,10 +2,6 @@ package io.github.afamiliarquiet.network;
 
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-
-import static io.github.afamiliarquiet.AFamiliarMaw.LOGGER;
 
 public class MawPackets {
 
