@@ -43,18 +43,29 @@ public class SwordChomperMixin extends ToolItem {
 		if (!world.isClient) {
 			if (user instanceof ServerPlayerEntity serverPlayerEntity) {
 				serverPlayerEntity.getHungerManager().add((int) Math.floor(getMaterial().getMiningSpeedMultiplier() / 3.0f), getMaterial().getEnchantability() / 5.0f);
+				user.getWorld().playSound(null, user.getBlockPos(), SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
 			}
 
 			if (getMaterial().equals(ToolMaterials.IRON)) {
 				// condition here is also removing command tag
-				if (user.removeCommandTag(AFamiliarMaw.TF_TAG) && user instanceof PlayerEntity) {
-					user.getWorld().playSound(null, user.getBlockPos(), SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.PLAYERS, 1.0f, 1.3f);
-					user.getWorld().playSound(null, user.getBlockPos(), SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.PLAYERS, 1.0f, 0.7f);
+				if (user.removeCommandTag(AFamiliarMaw.TF_TAG) && user instanceof PlayerEntity player) {
+					player.playSoundToPlayer(SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.PLAYERS, 0.5f, 1.3f);
+					user.getWorld().playSound(null, user.getBlockPos(), SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.PLAYERS, 0.5f, 0.7f);
 				}
 			}
 		}
 
 		stack.decrementUnlessCreative(1, user);
+		if (user instanceof PlayerEntity player && !player.isInCreativeMode()) {
+			ItemStack remnant = Items.STICK.getDefaultStack();
+			if (stack.isEmpty()) {
+				return remnant.copy();
+			}
+
+			if (!player.getWorld().isClient()) {
+				player.getInventory().insertStack(remnant.copy());
+			}
+		}
 		return stack;
 	}
 

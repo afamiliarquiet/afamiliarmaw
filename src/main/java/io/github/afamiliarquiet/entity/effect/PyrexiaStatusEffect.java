@@ -20,9 +20,9 @@ public class PyrexiaStatusEffect extends StatusEffect {
         if (!entity.getWorld().isClient()) {
             entity.addCommandTag(AFamiliarMaw.TF_TAG);
             entity.removeStatusEffect(entity.getWorld().getRegistryManager().get(RegistryKeys.STATUS_EFFECT).getEntry(MawEntities.PYREXIA_STATUS_EFFECT_ID).get());
-            if (entity instanceof PlayerEntity) {
-                entity.getWorld().playSound(null, entity.getBlockPos(), SoundEvents.BLOCK_END_PORTAL_SPAWN, SoundCategory.PLAYERS, 0.5f, 1.3f);
-                entity.getWorld().playSound(null, entity.getBlockPos(), SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.PLAYERS, 1.0f, 1.3f);
+            if (entity instanceof PlayerEntity player) {
+                player.playSoundToPlayer(SoundEvents.BLOCK_END_PORTAL_SPAWN, SoundCategory.PLAYERS, 0.2f, 1.3f);
+                entity.getWorld().playSound(null, entity.getBlockPos(), SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.PLAYERS, 0.5f, 1.3f);
             }
         }
         return true;
