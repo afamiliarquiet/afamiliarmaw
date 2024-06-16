@@ -66,16 +66,6 @@ public class PyreticLiqueurItem extends Item {
         return UseAction.DRINK;
     }
 
-//    @Override
-//    public SoundEvent getDrinkSound() {
-//        return SoundEvents.ITEM_HONEY_BOTTLE_DRINK;
-//    }
-//
-//    @Override
-//    public SoundEvent getEatSound() {
-//        return SoundEvents.ITEM_HONEY_BOTTLE_DRINK;
-//    }
-
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         return ItemUsage.consumeHeldItem(world, user, hand);
