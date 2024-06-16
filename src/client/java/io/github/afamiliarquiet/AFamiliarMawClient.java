@@ -21,7 +21,7 @@ public class AFamiliarMawClient implements ClientModInitializer {
 		MawKeybinds.register();
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-			while (ClientPlayNetworking.canSend(BreathPayload.ID) && breathKey.wasPressed() && MawUtils.canBreathe(client.player)) {
+			while (ClientPlayNetworking.canSend(BreathPayload.ID) && breathKey.wasPressed()/* && MawUtils.canBreathe(client.player)*/) {
 				ClientPlayNetworking.send(new BreathPayload(BreathPayload.Mode.START_BREATHING));
 			}
 		});

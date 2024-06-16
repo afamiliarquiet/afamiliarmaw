@@ -19,6 +19,9 @@ public class AFamiliarMaw implements ModInitializer {
 	public static final String MOD_ID = "afamiliarmaw";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
+	// don't wanna deal with mixins and don't want to add much so.. i'm gonna cheat a little and use command tags. nyeh
+	public static final String TF_TAG = "afamiliarmaw:metamorphosized";
+
 	// todo - descriptions for mods such as emi?
 	public static final TagKey<Enchantment> FIERY_ENCHANTMENTS = TagKey.of(RegistryKeys.ENCHANTMENT, getNamespacedIdentifier("fiery_enchantments"));
 	public static final TagKey<Item> FIERY_ITEMS = TagKey.of(RegistryKeys.ITEM, getNamespacedIdentifier("fiery_items"));

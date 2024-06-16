@@ -12,9 +12,10 @@ import net.minecraft.registry.entry.RegistryEntry;
 public class MawUtils {
     public static boolean canBreathe(PlayerEntity player) {
         // checking status effect is annoying, i don't like registryentry (so i'm avoiding it)
-        return (player.isOnFire()
-                || player.getMainHandStack().isIn(AFamiliarMaw.FIERY_ITEMS)
-                || EnchantmentHelper.hasAnyEnchantmentsIn(player.getMainHandStack(), AFamiliarMaw.FIERY_ENCHANTMENTS))
-                && player.hasStatusEffect(player.getWorld().getRegistryManager().get(RegistryKeys.STATUS_EFFECT).getEntry(MawEntities.PYREXIA_STATUS_EFFECT_ID).get());
+        return player.getCommandTags().contains(AFamiliarMaw.TF_TAG)
+                || ((player.isOnFire()
+                        || player.getMainHandStack().isIn(AFamiliarMaw.FIERY_ITEMS)
+                        || EnchantmentHelper.hasAnyEnchantmentsIn(player.getMainHandStack(), AFamiliarMaw.FIERY_ENCHANTMENTS))
+                    && player.hasStatusEffect(player.getWorld().getRegistryManager().get(RegistryKeys.STATUS_EFFECT).getEntry(MawEntities.PYREXIA_STATUS_EFFECT_ID).get()));
     }
 }
