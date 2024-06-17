@@ -2,10 +2,15 @@ package io.github.afamiliarquiet.network;
 
 import io.github.afamiliarquiet.MawUtils;
 import io.github.afamiliarquiet.entity.BreathProjectileEntity;
+import io.github.afamiliarquiet.entity.MawEntities;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 import static io.github.afamiliarquiet.AFamiliarMaw.getNamespacedIdentifier;
@@ -31,26 +36,14 @@ public class BreathPayload implements CustomPayload {
         breathProjectileEntity.setPosition(breathProjectileEntity.getPos().add(0, -.1, 0));
         player.getServerWorld().spawnEntity(breathProjectileEntity);
 
-//        Random random = player.getRandom();
-//        Vec3d pos = player.getEyePos();
-//        Vec3d movement = player.getMovement();
-//        float pitch = player.getPitch();
-//        float yaw = player.getYaw();
-//        float power = 0.2f;
-//        float uncertainty = 13f;
-//        float f = -MathHelper.sin(yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F);
-//        float g = -MathHelper.sin((pitch) * 0.017453292F);
-//        float h = MathHelper.cos(yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F);
-//        Vec3d roto = (new Vec3d(f, g, h)).normalize().add(random.nextTriangular(0.0, 0.0172275 * (double)uncertainty), random.nextTriangular(0.0, 0.0172275 * (double)uncertainty), random.nextTriangular(0.0, 0.0172275 * (double)uncertainty)).multiply((double)power);
-//        Vec3d sumOffset = roto.add(movement.x, player.isOnGround() ? 0.0 : movement.y, movement.z);
-
-//        for (int i = 0; i < 5; i++) {
-//
-//            player.getServerWorld().spawnParticles(ParticleTypes.FLAME,
-//                    pos.x + sumOffset.x, pos.y - 0.125 + sumOffset.y, pos.z + sumOffset.z,
-//                    0,
-//                    sumOffset.x, sumOffset.y, sumOffset.z, 1.0);
-//        }
+        RegistryEntry<StatusEffect> pyrexiaEntry = player.getWorld().getRegistryManager().get(RegistryKeys.STATUS_EFFECT).getEntry(MawEntities.PYREXIA_STATUS_EFFECT_ID).get();
+        StatusEffectInstance oldInstance = player.getStatusEffect(pyrexiaEntry);
+        if (oldInstance != null) {
+            player.removeStatusEffect(pyrexiaEntry);
+            if (oldInstance.getDuration() > 31) {
+                player.addStatusEffect(new StatusEffectInstance(oldInstance.getEffectType(), oldInstance.getDuration() - 31, oldInstance.getAmplifier(), oldInstance.isAmbient(), oldInstance.shouldShowParticles(), oldInstance.shouldShowIcon()));
+            }
+        }
     }
 
     public BreathPayload(Mode mode) {

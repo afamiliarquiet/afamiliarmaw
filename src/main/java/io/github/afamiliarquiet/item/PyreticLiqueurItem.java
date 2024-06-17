@@ -47,7 +47,7 @@ public class PyreticLiqueurItem extends Item {
                 RegistryEntry<StatusEffect> pyrexiaEntry = user.getWorld().getRegistryManager().get(RegistryKeys.STATUS_EFFECT).getEntry(MawEntities.PYREXIA_STATUS_EFFECT_ID).get();
                 StatusEffectInstance effectInstance = user.getStatusEffect(pyrexiaEntry);
                 int currentDuration = effectInstance == null ? 0 : effectInstance.getDuration();
-                user.addStatusEffect(new StatusEffectInstance(pyrexiaEntry, 3600 + currentDuration, 0, false, false, true));
+                user.addStatusEffect(new StatusEffectInstance(pyrexiaEntry, 1200 + currentDuration, 0, false, false, true));
             }
             world.playSound((PlayerEntity) null, user.getBlockPos(), SoundEvents.ITEM_OMINOUS_BOTTLE_DISPOSE, user.getSoundCategory(), 1.0F, 1.0F);
         }

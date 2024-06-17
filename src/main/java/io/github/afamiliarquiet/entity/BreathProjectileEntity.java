@@ -6,13 +6,18 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.thrown.ThrownEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Util;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Vec3d;
@@ -87,7 +92,7 @@ public class BreathProjectileEntity extends ThrownEntity {
 
         if (this.getWorld().isClient) {
             Random random = this.getRandom();
-            if (random.nextDouble() > 0.31) {
+            if (random.nextFloat() > 0.31f) {
                 Vec3d p = this.getPos().addRandom(random, this.age * 0.1f);
                 Vec3d v = this.getVelocity().addRandom(random, 0.031f);
                 if (!this.statusEffects.isEmpty()) {
@@ -114,7 +119,7 @@ public class BreathProjectileEntity extends ThrownEntity {
 //                    0,
 //                    movement.x, movement.y, movement.z, 1.0);
             if (this.age > 13) {
-                this.kill();
+                this.discard();
             }
         }
     }
@@ -136,10 +141,17 @@ public class BreathProjectileEntity extends ThrownEntity {
 
         Entity entity = entityHitResult.getEntity();
 
+        // these flames don't seem to respect pvp by default (i hoped extending projectile would do that)
+        // so we be safe and respectful by checking here and stopping if requested :)
+        // (including not burning pets because burning pets is bad and this is just for a fest (tho it sounds like pvp will be on for the fest so this won't matter but whatever!!! the point is you shouldn't try to burn pets. i could just make that always the case actually but.. ehhhh. eh.)
+        boolean skipBadStuff = (!entity.getWorld().getServer().isPvpEnabled() &&
+                entity instanceof PlayerEntity ||
+                entity instanceof TameableEntity possiblePet && possiblePet.isTamed());
+
         // dunno if these checks for fire/splash immunity are necessary but..
         // it's good to be respectful to the entity's wishes anyway
         if (!entity.isFireImmune()) {
-            entity.setOnFireForTicks(20);
+            entity.setOnFireForTicks(skipBadStuff ? 13 : 20);
         }
 
         if (entity instanceof LivingEntity) {
@@ -148,7 +160,7 @@ public class BreathProjectileEntity extends ThrownEntity {
             if (this.statusEffects != null && livingEntity.isAffectedBySplashPotions() && !livingEntity.isFireImmune()) {
                 // splat on a copy of every status effect we can, except for the fiery stuff (it has combusted)
                 for (StatusEffectInstance statusEffect : this.statusEffects) {
-                    if (livingEntity.canHaveStatusEffect(statusEffect)) {
+                    if (livingEntity.canHaveStatusEffect(statusEffect) && !(skipBadStuff && statusEffect.getEffectType().value().getCategory().equals(StatusEffectCategory.HARMFUL))) {
                         livingEntity.addStatusEffect(new StatusEffectInstance(statusEffect), this);
                     }
                 }
@@ -160,16 +172,11 @@ public class BreathProjectileEntity extends ThrownEntity {
     public void onSpawnPacket(EntitySpawnS2CPacket packet) {
         super.onSpawnPacket(packet);
 
-        // todo - remove this
-        if (!this.getWorld().isClient()) {
-            AFamiliarMaw.LOGGER.warn("turns out S2C packet can get sent to server world too");
-        }
-
         Vec3d v = (new Vec3d(packet.getVelocityX(), packet.getVelocityY(), packet.getVelocityZ())).addRandom(random, 0.031f);
         Vec3d p = this.getPos().addRandom(this.getRandom(), this.age * 0.1f).add(v.multiply(0.25));
 
         ParticleEffect particle;
-        if (!this.statusEffects.isEmpty() && this.getRandom().nextDouble() < 0.31) {
+        if (!this.statusEffects.isEmpty() && this.getRandom().nextFloat() < 0.31f) {
             AFamiliarMaw.LOGGER.info("ploppin a status swirl");
             particle = Util.getRandom(statusEffects, this.getRandom()).createParticle();
         } else {
@@ -177,6 +184,9 @@ public class BreathProjectileEntity extends ThrownEntity {
         }
 
         this.getWorld().addImportantParticle(particle, p.x, p.y, p.z, v.x, v.y, v.z);
+        if (this.getRandom().nextFloat() < 0.13f) {
+            this.getWorld().playSound(null, this.getBlockPos(), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 0.5f, (this.getRandom().nextFloat() * 0.1f + 0.4f));
+        }
     }
 
     @Override

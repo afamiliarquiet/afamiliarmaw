@@ -21,13 +21,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(SwordItem.class)
-public class SwordChomperMixin extends ToolItem {
-	public SwordChomperMixin(ToolMaterial material, Settings settings) {
+public abstract class SwordChomperMixin extends ToolItem {
+	public SwordChomperMixin(ToolMaterial material, Item.Settings settings) {
 		super(material, settings);
 	}
 
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-		if (user.canConsume(false)) {
+		if (user.canConsume(false) && user.getPitch() < -50f) {
 			return ItemUsage.consumeHeldItem(world, user, hand);
 		} else {
 			return TypedActionResult.fail(user.getStackInHand(hand));

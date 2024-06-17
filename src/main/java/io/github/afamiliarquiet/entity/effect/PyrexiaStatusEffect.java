@@ -30,6 +30,6 @@ public class PyrexiaStatusEffect extends StatusEffect {
 
     @Override
     public boolean canApplyUpdateEffect(int duration, int amplifier) {
-        return duration >= 216000;
+        return duration >= 72000;
     }
 }
