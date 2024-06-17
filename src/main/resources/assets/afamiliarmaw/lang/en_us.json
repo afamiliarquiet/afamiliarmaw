@@ -4,5 +4,7 @@
   "item.afamiliarmaw.pyretic_liqueur": "Pyretic Liqueur",
   "effect.afamiliarmaw.pyrexia": "Pyrexia",
   "tag.enchantment.afamiliarmaw.fiery_enchantments": "Fiery Enchantments",
-  "tag.item.afamiliarmaw.fiery_items": "Fiery Items"
+  "tag.item.afamiliarmaw.fiery_items": "Fiery Items",
+  "message.afamiliarmaw.tf": "A fire has started within you...",
+  "message.afamiliarmaw.striptf": "The cold iron snack disrupts the fire within you..."
 }

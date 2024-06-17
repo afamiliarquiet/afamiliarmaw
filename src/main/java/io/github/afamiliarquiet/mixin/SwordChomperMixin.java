@@ -1,11 +1,9 @@
 package io.github.afamiliarquiet.mixin;
 
-import io.github.afamiliarquiet.AFamiliarMaw;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -15,10 +13,8 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import static io.github.afamiliarquiet.MawUtils.stripPyrexiaTf;
 
 @Mixin(SwordItem.class)
 public abstract class SwordChomperMixin extends ToolItem {
@@ -47,11 +43,7 @@ public abstract class SwordChomperMixin extends ToolItem {
 			}
 
 			if (getMaterial().equals(ToolMaterials.IRON)) {
-				// condition here is also removing command tag
-				if (user.removeCommandTag(AFamiliarMaw.TF_TAG) && user instanceof PlayerEntity player) {
-					player.playSoundToPlayer(SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.PLAYERS, 0.5f, 1.3f);
-					user.getWorld().playSound(null, user.getBlockPos(), SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.PLAYERS, 0.5f, 0.7f);
-				}
+				stripPyrexiaTf(user);
 			}
 		}
 

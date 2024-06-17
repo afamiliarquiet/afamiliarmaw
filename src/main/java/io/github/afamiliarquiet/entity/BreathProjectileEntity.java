@@ -24,7 +24,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
-import java.util.Iterator;
 import java.util.List;
 
 public class BreathProjectileEntity extends ThrownEntity {
@@ -68,10 +67,8 @@ public class BreathProjectileEntity extends ThrownEntity {
         super.writeCustomDataToNbt(nbt);
         if (!this.statusEffects.isEmpty()) {
             NbtList nbtList = new NbtList();
-            Iterator statusIterator = this.statusEffects.iterator();
 
-            while(statusIterator.hasNext()) {
-                StatusEffectInstance statusEffectInstance = (StatusEffectInstance) statusIterator.next();
+            for (StatusEffectInstance statusEffectInstance : this.statusEffects) {
                 nbtList.add(statusEffectInstance.writeNbt());
             }
 
@@ -101,23 +98,6 @@ public class BreathProjectileEntity extends ThrownEntity {
                 }
             }
         } else {
-//            Random random = this.getRandom();
-//            Vec3d pos = this.getPos();
-//            Vec3d movement = this.getMovement();
-//            float pitch = this.getPitch();
-//            float yaw = this.getYaw();
-//            float power = 0.2f;
-//            float uncertainty = 13f;
-//            float f = -MathHelper.sin(yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F);
-//            float g = -MathHelper.sin((pitch) * 0.017453292F);
-//            float h = MathHelper.cos(yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F);
-//            Vec3d roto = (new Vec3d(f, g, h)).normalize().add(random.nextTriangular(0.0, 0.0172275 * (double)uncertainty), random.nextTriangular(0.0, 0.0172275 * (double)uncertainty), random.nextTriangular(0.0, 0.0172275 * (double)uncertainty)).multiply((double)power);
-//            Vec3d sumOffset = roto.add(movement.x, movement.y, movement.z);
-//
-//            ((ServerWorld)this.getWorld()).spawnParticles(ParticleTypes.FLAME,
-//                    pos.x, pos.y, pos.z,
-//                    0,
-//                    movement.x, movement.y, movement.z, 1.0);
             if (this.age > 13) {
                 this.discard();
             }
