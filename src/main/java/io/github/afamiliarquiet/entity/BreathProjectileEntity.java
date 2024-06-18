@@ -1,11 +1,10 @@
 package io.github.afamiliarquiet.entity;
 
-import io.github.afamiliarquiet.AFamiliarMaw;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.passive.TameableEntity;
@@ -13,27 +12,25 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.thrown.ThrownEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Util;
 import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
 import java.util.List;
 
 public class BreathProjectileEntity extends ThrownEntity {
-    private List<StatusEffectInstance> statusEffects;
+    private final List<StatusEffectInstance> statusEffects;
+    private static final TrackedData<List<ParticleEffect>> POTION_SWIRLS = DataTracker.registerData(BreathProjectileEntity.class, TrackedDataHandlerRegistry.PARTICLE_LIST);
 
     protected BreathProjectileEntity(EntityType<? extends ThrownEntity> entityType, World world) {
         super(entityType, world);
         this.statusEffects = List.of();
     }
 
+    @SuppressWarnings("unused") // nyeh. it's maybe used by /summon or something... it stays.
     protected BreathProjectileEntity(EntityType<? extends ThrownEntity> type, double x, double y, double z, World world) {
         super(type, x, y, z, world);
         this.statusEffects = List.of();
@@ -42,10 +39,17 @@ public class BreathProjectileEntity extends ThrownEntity {
     public BreathProjectileEntity(LivingEntity owner, World world) {
         super(MawEntities.BREATH_PROJECTILE_TYPE, owner, world);
         this.statusEffects = owner.getStatusEffects()
-                .stream().filter((statusEffect)-> !(statusEffect.getEffectType().matchesId(MawEntities.PYREXIA_STATUS_EFFECT_ID)))
+                .stream().filter((statusEffect)-> !(statusEffect.getEffectType().matchesId(MawEntities.DRACONIC_OMEN_STATUS_EFFECT_ID)))
                 .toList();
+        updateSwirls();
     }
 
+    private void updateSwirls() {
+        List<ParticleEffect> list = this.statusEffects.stream().filter(StatusEffectInstance::shouldShowParticles).map(StatusEffectInstance::createParticle).toList();
+        this.dataTracker.set(POTION_SWIRLS, list);
+    }
+
+    // i'm not really sure if i need this stuff but whatever!
     @Override
     protected void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
@@ -56,10 +60,14 @@ public class BreathProjectileEntity extends ThrownEntity {
                 NbtCompound nbtCompound = nbtList.getCompound(i);
                 StatusEffectInstance statusEffectInstance = StatusEffectInstance.fromNbt(nbtCompound);
                 if (statusEffectInstance != null) {
+                    //noinspection DataFlowIssue nyeh!
                     this.statusEffects.add(statusEffectInstance);
                 }
             }
+
+            updateSwirls();
         }
+
     }
 
     @Override
@@ -78,25 +86,30 @@ public class BreathProjectileEntity extends ThrownEntity {
 
     @Override
     protected void initDataTracker(DataTracker.Builder builder) {
-
+        builder.add(POTION_SWIRLS, List.of());
     }
 
     @Override
     public void tick() {
         super.tick();
 
+        // friction copied from fire particle.. its ok :thumbsup:
+        // also means that gravity has a little more takeover power, as original v will be fricted but gravity keep goin
         this.setVelocity(this.getVelocity().multiply(0.96));
+        this.calculateDimensions();
 
         if (this.getWorld().isClient) {
-            Random random = this.getRandom();
-            if (random.nextFloat() > 0.31f) {
-                Vec3d p = this.getPos().addRandom(random, this.age * 0.1f);
-                Vec3d v = this.getVelocity().addRandom(random, 0.031f);
-                if (!this.statusEffects.isEmpty()) {
-                    ParticleEffect particle = Util.getRandom(statusEffects, this.getRandom()).createParticle();
-                    this.getWorld().addImportantParticle(particle, p.x, p.y, p.z, v.x, v.y, v.z);
+            List<ParticleEffect> particles = this.dataTracker.get(POTION_SWIRLS);
+            if (!particles.isEmpty()) {
+                if (this.random.nextInt(31) == 0) {
+                    this.getWorld().addParticle(Util.getRandom(particles, this.random),
+                            this.getParticleX(0.5), this.getRandomBodyY(), this.getParticleZ(0.5),
+                            0, 0.13, 0);
                 }
             }
+            this.getWorld().playSound(null, this.getBlockPos(),
+                    SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS,
+                    0.5f, (this.getRandom().nextFloat() * 0.1f + 0.4f));
         } else {
             if (this.age > 13) {
                 this.discard();
@@ -106,7 +119,14 @@ public class BreathProjectileEntity extends ThrownEntity {
 
     @Override
     public double getGravity() {
-        return 0.00;
+        return -0.015;
+    }
+
+    @Override
+    public boolean isOnFire() {
+        // why bother with particles when you can just burn the thing that actually does collisions and get free fire?
+        return true;
+        //return !this.isSubmergedInWater();
     }
 
     @Override
@@ -123,8 +143,11 @@ public class BreathProjectileEntity extends ThrownEntity {
 
         // these flames don't seem to respect pvp by default (i hoped extending projectile would do that)
         // so we be safe and respectful by checking here and stopping if requested :)
-        // (including not burning pets because burning pets is bad and this is just for a fest (tho it sounds like pvp will be on for the fest so this won't matter but whatever!!! the point is you shouldn't try to burn pets. i could just make that always the case actually but.. ehhhh. eh.)
-        boolean skipBadStuff = (!entity.getWorld().getServer().isPvpEnabled() &&
+        // (including not burning pets because burning pets is bad and this is just for a fest
+        // (tho it sounds like pvp will be on for the fest so this won't matter but whatever!!!
+        // the point is you shouldn't try to burn pets. i could just make that always the case actually but.. ehhhh. eh.)
+        // ok well it looks like i did eventually make it so pets never get harmed. maybe. cool!
+        boolean skipBadStuff = (!(entity.getWorld().getServer() != null && entity.getWorld().getServer().isPvpEnabled()) &&
                 entity instanceof PlayerEntity ||
                 entity instanceof TameableEntity possiblePet && possiblePet.isTamed());
 
@@ -139,8 +162,10 @@ public class BreathProjectileEntity extends ThrownEntity {
 
             if (this.statusEffects != null && livingEntity.isAffectedBySplashPotions() && !livingEntity.isFireImmune()) {
                 // splat on a copy of every status effect we can, except for the fiery stuff (it has combusted)
+                // maybe source should be the owner of this instead? idk
                 for (StatusEffectInstance statusEffect : this.statusEffects) {
-                    if (livingEntity.canHaveStatusEffect(statusEffect) && !(skipBadStuff && statusEffect.getEffectType().value().getCategory().equals(StatusEffectCategory.HARMFUL))) {
+                    if (livingEntity.canHaveStatusEffect(statusEffect) &&
+                            !(skipBadStuff && statusEffect.getEffectType().value().getCategory().equals(StatusEffectCategory.HARMFUL))) {
                         livingEntity.addStatusEffect(new StatusEffectInstance(statusEffect), this);
                     }
                 }
@@ -149,32 +174,17 @@ public class BreathProjectileEntity extends ThrownEntity {
     }
 
     @Override
-    public void onSpawnPacket(EntitySpawnS2CPacket packet) {
-        super.onSpawnPacket(packet);
-
-        Vec3d v = (new Vec3d(packet.getVelocityX(), packet.getVelocityY(), packet.getVelocityZ())).addRandom(random, 0.031f);
-        Vec3d p = this.getPos().addRandom(this.getRandom(), this.age * 0.1f).add(v.multiply(0.25));
-
-        ParticleEffect particle;
-        if (!this.statusEffects.isEmpty() && this.getRandom().nextFloat() < 0.31f) {
-            AFamiliarMaw.LOGGER.info("ploppin a status swirl");
-            particle = Util.getRandom(statusEffects, this.getRandom()).createParticle();
-        } else {
-            particle = ParticleTypes.FLAME;
-        }
-
-        this.getWorld().addImportantParticle(particle, p.x, p.y, p.z, v.x, v.y, v.z);
-        if (this.getRandom().nextFloat() < 0.13f) {
-            this.getWorld().playSound(null, this.getBlockPos(), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 0.5f, (this.getRandom().nextFloat() * 0.1f + 0.4f));
-        }
-    }
-
-    @Override
     protected void onBlockCollision(BlockState state) {
         super.onBlockCollision(state);
     }
 
-    public static BreathProjectileEntity create(EntityType<BreathProjectileEntity> type, World world) {
-        return new BreathProjectileEntity(type, world); // maybe this is useful? idk!
+    @Override
+    public EntityDimensions getDimensions(EntityPose pose) {
+        // bigger... BIGGER (vwoosh)
+        // this actually feels like a nice way of getting the expanding fireball effect!
+        // is it more expensive than maybe would be reasonable? (and like everything else,)
+        // idk! find out when someone reads this and says "well there's yer problem"!
+        float size = this.age * 0.05f + 0.05f;
+        return EntityDimensions.changing(size, size);
     }
 }

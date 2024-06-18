@@ -11,14 +11,14 @@ import net.minecraft.util.Identifier;
 import static io.github.afamiliarquiet.AFamiliarMaw.getNamespacedIdentifier;
 
 public class MawItems {
-    public static final PyreticLiqueurItem PYRETIC_LIQUEUR = new PyreticLiqueurItem(new Item.Settings());
-    public static final Identifier PYRETIC_LIQUEUR_ID = getNamespacedIdentifier("pyretic_liqueur");
+    public static final CuriousVialItem CURIOUS_VIAL = new CuriousVialItem(new Item.Settings());
+    public static final Identifier CURIOUS_VIAL_ID = getNamespacedIdentifier("curious_vial");
 
     public static void register() {
-        Registry.register(Registries.ITEM, PYRETIC_LIQUEUR_ID, PYRETIC_LIQUEUR);
+        Registry.register(Registries.ITEM, CURIOUS_VIAL_ID, CURIOUS_VIAL);
 
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FOOD_AND_DRINK).register(content -> {
-            content.addAfter(Items.HONEY_BOTTLE, PYRETIC_LIQUEUR);
-        });
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FOOD_AND_DRINK).register(
+                content -> content.addAfter(Items.OMINOUS_BOTTLE, CURIOUS_VIAL)
+        );
     }
 }

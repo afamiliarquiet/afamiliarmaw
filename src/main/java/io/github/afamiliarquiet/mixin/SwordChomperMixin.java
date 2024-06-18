@@ -38,7 +38,9 @@ public abstract class SwordChomperMixin extends ToolItem {
 		}
 		if (!world.isClient) {
 			if (user instanceof ServerPlayerEntity serverPlayerEntity) {
-				serverPlayerEntity.getHungerManager().add((int) Math.floor(getMaterial().getMiningSpeedMultiplier() / 3.0f), getMaterial().getEnchantability() / 5.0f);
+				serverPlayerEntity.getHungerManager().add(
+						(int) Math.floor(getMaterial().getMiningSpeedMultiplier() / 3.0f),
+						getMaterial().getEnchantability() / 5.0f);
 				user.getWorld().playSound(null, user.getBlockPos(), SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
 			}
 

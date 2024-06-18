@@ -6,9 +6,9 @@ import net.minecraft.entity.effect.StatusEffectCategory;
 
 import static io.github.afamiliarquiet.MawUtils.applyPyrexiaTf;
 
-public class PyrexiaStatusEffect extends StatusEffect {
-    public PyrexiaStatusEffect() {
-        super(StatusEffectCategory.NEUTRAL, 0xfcfcb3);
+public class DraconicOmenStatusEffect extends StatusEffect {
+    public DraconicOmenStatusEffect() {
+        super(StatusEffectCategory.BENEFICIAL, 0xfcfcb3);
     }
 
     @Override

@@ -3,17 +3,22 @@ package io.github.afamiliarquiet;
 import io.github.afamiliarquiet.entity.MawEntities;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.world.World;
 
 public class MawUtils {
     public static boolean canBreathe(PlayerEntity player) {
-        // checking status effect is annoying, i don't like registryentry (so i'm avoiding it)
+        RegistryEntry<StatusEffect> pyrexiaEntry = getPyrexiaEntry(player.getWorld());
+
         return isPyrexiaTfed(player)
-                || (player.hasStatusEffect(player.getWorld().getRegistryManager().get(RegistryKeys.STATUS_EFFECT).getEntry(MawEntities.PYREXIA_STATUS_EFFECT_ID).get())
+                || (pyrexiaEntry != null && player.hasStatusEffect(pyrexiaEntry)
                     && (player.isOnFire()
                         || player.getMainHandStack().isIn(AFamiliarMaw.FIERY_ITEMS)
                         || player.getOffHandStack().isIn(AFamiliarMaw.FIERY_ITEMS)
@@ -23,10 +28,30 @@ public class MawUtils {
                 );
     }
 
+    public static void consumePyrexia(PlayerEntity player) {
+        RegistryEntry<StatusEffect> pyrexiaEntry = getPyrexiaEntry(player.getWorld());
+        if (pyrexiaEntry == null) {
+            return;
+        }
+
+        StatusEffectInstance oldInstance = player.getStatusEffect(pyrexiaEntry);
+        if (oldInstance != null) {
+            player.removeStatusEffect(pyrexiaEntry);
+            if (oldInstance.getDuration() > 31) {
+                player.addStatusEffect(new StatusEffectInstance(oldInstance.getEffectType(), oldInstance.getDuration() - 31, oldInstance.getAmplifier(), oldInstance.isAmbient(), oldInstance.shouldShowParticles(), oldInstance.shouldShowIcon()));
+            }
+        }
+    }
+
+    public static RegistryEntry.Reference<StatusEffect> getPyrexiaEntry(World world) {
+        return world.getRegistryManager().get(RegistryKeys.STATUS_EFFECT).getEntry(MawEntities.DRACONIC_OMEN_STATUS_EFFECT_ID)
+                .orElse(null);
+    }
+
     // todo - maybe make my own soundevents for subtitle purposes
     public static void applyPyrexiaTf(LivingEntity entity) {
         entity.addCommandTag(AFamiliarMaw.TF_TAG);
-        entity.removeStatusEffect(entity.getWorld().getRegistryManager().get(RegistryKeys.STATUS_EFFECT).getEntry(MawEntities.PYREXIA_STATUS_EFFECT_ID).get());
+        entity.removeStatusEffect(getPyrexiaEntry(entity.getWorld()));
         if (entity instanceof PlayerEntity player) {
             player.playSoundToPlayer(SoundEvents.BLOCK_END_PORTAL_SPAWN, SoundCategory.PLAYERS, 0.1f, 1.3f);
             entity.getWorld().playSound(null, entity.getBlockPos(), SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.PLAYERS, 0.5f, 1.3f);

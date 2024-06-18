@@ -1,18 +1,16 @@
 package io.github.afamiliarquiet;
 
 import io.github.afamiliarquiet.entity.MawEntities;
-import io.github.afamiliarquiet.network.BreathPayload;
+import io.github.afamiliarquiet.network.BreathPacket;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.entity.EmptyEntityRenderer;
-import net.minecraft.client.util.InputUtil;
-import org.lwjgl.glfw.GLFW;
 
-import static io.github.afamiliarquiet.MawKeybinds.breathKey;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static io.github.afamiliarquiet.MawKeybinds.breatheKey;
 
 public class AFamiliarMawClient implements ClientModInitializer {
 
@@ -22,11 +20,18 @@ public class AFamiliarMawClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		// This entrypoint is suitable for setting up client-specific logic, such as rendering.
 
-		MawKeybinds.register();
 
+		// todo - make default ticking rate configy and also change consumption rate based on ticky fire rate
+		MawKeybinds.register();
+		AtomicInteger cooldown = new AtomicInteger();
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-			if (ClientPlayNetworking.canSend(BreathPayload.ID) && breathKey.isPressed()/* && MawUtils.canBreathe(client.player)*/) {
-				ClientPlayNetworking.send(new BreathPayload(BreathPayload.Mode.START_BREATHING));
+			if (cooldown.get() > 0) {
+				cooldown.getAndDecrement();
+			}
+
+			if (cooldown.get() == 0 && ClientPlayNetworking.canSend(BreathPacket.ID) && breatheKey.isPressed()) {
+				ClientPlayNetworking.send(new BreathPacket(BreathPacket.Mode.START_BREATHING));
+				cooldown.set(2);
 			}
 		});
 

@@ -6,18 +6,10 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 public class MawPackets {
 
     public static void registerC2SPayloads() {
-        PayloadTypeRegistry.playC2S().register(BreathPayload.ID, BreathPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(BreathPacket.ID, BreathPacket.CODEC);
     }
 
     public static void registerC2SReceivers() {
-        ServerPlayNetworking.registerGlobalReceiver(BreathPayload.ID, BreathPayload::receive);
-    }
-
-    public static void registerS2CPayloads() {
-
-    }
-
-    public static void registerS2CReceivers() {
-
+        ServerPlayNetworking.registerGlobalReceiver(BreathPacket.ID, BreathPacket::receive);
     }
 }

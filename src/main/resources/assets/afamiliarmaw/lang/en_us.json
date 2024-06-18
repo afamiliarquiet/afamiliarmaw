@@ -1,8 +1,8 @@
 {
   "key.afamiliarmaw.breathe":  "Breathe",
-  "category.afamiliarmaw.maw": "Maw",
-  "item.afamiliarmaw.pyretic_liqueur": "Pyretic Liqueur",
-  "effect.afamiliarmaw.pyrexia": "Pyrexia",
+  "category.afamiliarmaw.maw": "your Magnificent Maw",
+  "item.afamiliarmaw.curious_vial": "Curious Vial",
+  "effect.afamiliarmaw.draconic_omen": "Draconic Omen",
   "tag.enchantment.afamiliarmaw.fiery_enchantments": "Fiery Enchantments",
   "tag.item.afamiliarmaw.fiery_items": "Fiery Items",
   "message.afamiliarmaw.tf": "A fire has started within you...",

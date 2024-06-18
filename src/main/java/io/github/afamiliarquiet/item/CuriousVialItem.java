@@ -7,13 +7,11 @@ import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
@@ -27,9 +25,11 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.Objects;
 
-public class PyreticLiqueurItem extends Item {
+import static io.github.afamiliarquiet.MawUtils.getPyrexiaEntry;
 
-    public PyreticLiqueurItem(Settings settings) {
+public class CuriousVialItem extends Item {
+
+    public CuriousVialItem(Settings settings) {
         super(settings);
     }
 
@@ -44,12 +44,12 @@ public class PyreticLiqueurItem extends Item {
             if (user.getCommandTags().contains(AFamiliarMaw.TF_TAG) && user instanceof PlayerEntity player) {
                 player.getHungerManager().add(1, 1.0F);
             } else {
-                RegistryEntry<StatusEffect> pyrexiaEntry = user.getWorld().getRegistryManager().get(RegistryKeys.STATUS_EFFECT).getEntry(MawEntities.PYREXIA_STATUS_EFFECT_ID).get();
+                RegistryEntry<StatusEffect> pyrexiaEntry = getPyrexiaEntry(user.getWorld());
                 StatusEffectInstance effectInstance = user.getStatusEffect(pyrexiaEntry);
                 int currentDuration = effectInstance == null ? 0 : effectInstance.getDuration();
                 user.addStatusEffect(new StatusEffectInstance(pyrexiaEntry, 1200 + currentDuration, 0, false, false, true));
             }
-            world.playSound((PlayerEntity) null, user.getBlockPos(), SoundEvents.ITEM_OMINOUS_BOTTLE_DISPOSE, user.getSoundCategory(), 1.0F, 1.0F);
+            world.playSound(null, user.getBlockPos(), SoundEvents.ITEM_OMINOUS_BOTTLE_DISPOSE, user.getSoundCategory(), 1.0F, 1.0F);
         }
 
         stack.decrementUnlessCreative(1, user);
@@ -74,7 +74,9 @@ public class PyreticLiqueurItem extends Item {
     @Override
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         super.appendTooltip(stack, context, tooltip, type);
-        List<StatusEffectInstance> list = List.of(new StatusEffectInstance(RegistryEntry.of(MawEntities.PYREXIA_STATUS_EFFECT), 3600, 0, false, false, true));
+        List<StatusEffectInstance> list = List.of(new StatusEffectInstance(RegistryEntry.of(
+                MawEntities.DRACONIC_OMEN_STATUS_EFFECT), 1200, 0,
+                false, false, true));
         Objects.requireNonNull(tooltip);
         PotionContentsComponent.buildTooltip(list, tooltip::add, 1.0F, context.getUpdateTickRate());
     }

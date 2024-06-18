@@ -2,14 +2,14 @@
 	"schemaVersion": 1,
 	"id": "afamiliarmaw",
 	"version": "${version}",
-	"name": "afamiliarmaw",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "the Magnificent Maw",
+	"description": "a Curious Vial, and a few tricks with your Maw. remember to Breathe!",
 	"authors": [
-		"Me!"
+		"afamiliarquiet"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/afamiliarquiet/afamiliarmaw",
+		"sources": "https://github.com/afamiliarquiet/afamiliarmaw"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/afamiliarmaw/icon.png",
