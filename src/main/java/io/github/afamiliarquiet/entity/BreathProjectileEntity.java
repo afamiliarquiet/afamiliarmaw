@@ -102,7 +102,7 @@ public class BreathProjectileEntity extends ThrownEntity {
         if (this.getWorld().isClient) {
             List<ParticleEffect> particles = this.dataTracker.get(POTION_SWIRLS);
             if (!particles.isEmpty()) {
-                if (this.random.nextInt(31) == 0) {
+                if (this.random.nextInt(13) == 0) {
                     this.getWorld().addParticle(Util.getRandom(particles, this.random),
                             this.getParticleX(0.5), this.getRandomBodyY(), this.getParticleZ(0.5),
                             0, 0.13, 0);
