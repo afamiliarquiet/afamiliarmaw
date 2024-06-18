@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import java.util.List;
 
 public class BreathProjectileEntity extends ThrownEntity {
+    private static final int MAX_AGE = 13;
     private final List<StatusEffectInstance> statusEffects;
     private static final TrackedData<List<ParticleEffect>> POTION_SWIRLS = DataTracker.registerData(BreathProjectileEntity.class, TrackedDataHandlerRegistry.PARTICLE_LIST);
 
@@ -111,7 +112,7 @@ public class BreathProjectileEntity extends ThrownEntity {
                     SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS,
                     0.5f, (this.getRandom().nextFloat() * 0.1f + 0.4f));
         } else {
-            if (this.age > 13) {
+            if (this.age > MAX_AGE) {
                 this.discard();
             }
         }
@@ -125,8 +126,8 @@ public class BreathProjectileEntity extends ThrownEntity {
     @Override
     public boolean isOnFire() {
         // why bother with particles when you can just burn the thing that actually does collisions and get free fire?
-        return true;
-        //return !this.isSubmergedInWater();
+        //return true;
+        return !this.isSubmergedInWater();
     }
 
     @Override
@@ -184,7 +185,8 @@ public class BreathProjectileEntity extends ThrownEntity {
         // this actually feels like a nice way of getting the expanding fireball effect!
         // is it more expensive than maybe would be reasonable? (and like everything else,)
         // idk! find out when someone reads this and says "well there's yer problem"!
-        float size = this.age * 0.05f + 0.05f;
+        float agePercent = (this.age + 1) / (float) (MAX_AGE + 1);
+        float size = agePercent * agePercent + 0.05f;
         return EntityDimensions.changing(size, size);
     }
 }

@@ -3,7 +3,8 @@
 	"package": "io.github.afamiliarquiet.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"SwordChomperMixin"
+		"SwordChomperMixin",
+        "ALittlePlayerBooleanMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

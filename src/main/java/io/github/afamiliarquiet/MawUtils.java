@@ -1,6 +1,7 @@
 package io.github.afamiliarquiet;
 
 import io.github.afamiliarquiet.entity.MawEntities;
+import io.github.afamiliarquiet.network.MawBearer;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
@@ -50,25 +51,36 @@ public class MawUtils {
 
     // todo - maybe make my own soundevents for subtitle purposes
     public static void applyPyrexiaTf(LivingEntity entity) {
-        entity.addCommandTag(AFamiliarMaw.TF_TAG);
-        entity.removeStatusEffect(getPyrexiaEntry(entity.getWorld()));
-        if (entity instanceof PlayerEntity player) {
-            player.playSoundToPlayer(SoundEvents.BLOCK_END_PORTAL_SPAWN, SoundCategory.PLAYERS, 0.1f, 1.3f);
-            entity.getWorld().playSound(null, entity.getBlockPos(), SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.PLAYERS, 0.5f, 1.3f);
-            player.sendMessage(Text.translatable("message.afamiliarmaw.tf").withColor(0xFFAA00), true);
+        if (entity instanceof MawBearer morpher) {
+            morpher.maw$setMetamorphosized(true);
+            entity.removeStatusEffect(getPyrexiaEntry(entity.getWorld()));
+            if (entity instanceof PlayerEntity player) {
+                player.playSoundToPlayer(SoundEvents.BLOCK_END_PORTAL_SPAWN, SoundCategory.PLAYERS, 0.1f, 1.3f);
+                entity.getWorld().playSound(null, entity.getBlockPos(), SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.PLAYERS, 0.5f, 1.3f);
+                player.sendMessage(Text.translatable("message.afamiliarmaw.tf").withColor(0xFFAA00), true);
+            }
         }
     }
 
     public static void stripPyrexiaTf(LivingEntity entity) {
         // condition here is also removing command tag
-        if (entity.removeCommandTag(AFamiliarMaw.TF_TAG) && entity instanceof PlayerEntity player) {
-            player.playSoundToPlayer(SoundEvents.BLOCK_ENDER_CHEST_OPEN, SoundCategory.PLAYERS, 0.7f, 0.7f);
-            entity.getWorld().playSound(null, entity.getBlockPos(), SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.PLAYERS, 0.5f, 0.7f);
-            player.sendMessage(Text.translatable("message.afamiliarmaw.striptf").withColor(0xAAAAAA), true);
+        if (entity instanceof MawBearer morpher) {
+            morpher.maw$setMetamorphosized(false);
+
+            if (entity instanceof PlayerEntity player) {
+                player.playSoundToPlayer(SoundEvents.BLOCK_ENDER_CHEST_OPEN, SoundCategory.PLAYERS, 0.7f, 0.7f);
+                entity.getWorld().playSound(null, entity.getBlockPos(), SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.PLAYERS, 0.5f, 0.7f);
+                player.sendMessage(Text.translatable("message.afamiliarmaw.striptf").withColor(0xAAAAAA), true);
+            }
         }
     }
 
     public static boolean isPyrexiaTfed(LivingEntity entity) {
-        return entity.getCommandTags().contains(AFamiliarMaw.TF_TAG);
+        if (entity instanceof MawBearer morpher) {
+            return morpher.maw$getMetamorphosized();
+        } else {
+            return false;
+        }
+        //return entity.getCommandTags().contains(AFamiliarMaw.TF_TAG);
     }
 }

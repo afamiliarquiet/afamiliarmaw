@@ -8,7 +8,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.render.entity.EmptyEntityRenderer;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static io.github.afamiliarquiet.MawKeybinds.breatheKey;
 
@@ -20,19 +20,19 @@ public class AFamiliarMawClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		// This entrypoint is suitable for setting up client-specific logic, such as rendering.
 
-
-		// todo - make default ticking rate configy and also change consumption rate based on ticky fire rate
 		MawKeybinds.register();
-		AtomicInteger cooldown = new AtomicInteger();
+
+		AtomicBoolean breathingLastTick = new AtomicBoolean(false);
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-			if (cooldown.get() > 0) {
-				cooldown.getAndDecrement();
+			boolean breathingNow = breatheKey.isPressed();
+
+			if (ClientPlayNetworking.canSend(BreathPacket.ID) && breathingNow != breathingLastTick.get()) {
+				BreathPacket.Mode mode = breathingNow ? BreathPacket.Mode.START_BREATHING : BreathPacket.Mode.STOP_BREATHING;
+
+				ClientPlayNetworking.send(new BreathPacket(mode));
 			}
 
-			if (cooldown.get() == 0 && ClientPlayNetworking.canSend(BreathPacket.ID) && breatheKey.isPressed()) {
-				ClientPlayNetworking.send(new BreathPacket(BreathPacket.Mode.START_BREATHING));
-				cooldown.set(2);
-			}
+			breathingLastTick.set(breathingNow);
 		});
 
 		EntityRendererRegistry.register(MawEntities.BREATH_PROJECTILE_TYPE, EmptyEntityRenderer::new);
