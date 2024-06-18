@@ -185,7 +185,7 @@ public class BreathProjectileEntity extends ThrownEntity {
         // this actually feels like a nice way of getting the expanding fireball effect!
         // is it more expensive than maybe would be reasonable? (and like everything else,)
         // idk! find out when someone reads this and says "well there's yer problem"!
-        float agePercent = (this.age + 1) / (float) (MAX_AGE + 1);
+        float agePercent = this.age / (float) MAX_AGE;
         float size = agePercent * agePercent + 0.05f;
         return EntityDimensions.changing(size, size);
     }
