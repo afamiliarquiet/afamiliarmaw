@@ -19,9 +19,7 @@ that's right! if you have potion effects, they'll be spread by your fire! and th
 ### 2. Sword-Swallowing!
 ok this part isn't really an exclamation mark.
 
-you just get to eat swords. they're food.
-
-it leaves a stick behind?
+you just get to eat swords. they're food. well.. the blades are, at least. the rest of the sword will stay.
 
 ### ?. _Poof!_ Transformation!
 wait. what?

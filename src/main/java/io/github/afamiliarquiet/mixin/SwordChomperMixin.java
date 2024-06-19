@@ -1,5 +1,6 @@
 package io.github.afamiliarquiet.mixin;
 
+import io.github.afamiliarquiet.item.MawItems;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -39,8 +40,8 @@ public abstract class SwordChomperMixin extends ToolItem {
 		if (!world.isClient) {
 			if (user instanceof ServerPlayerEntity serverPlayerEntity) {
 				serverPlayerEntity.getHungerManager().add(
-						(int) Math.floor(getMaterial().getMiningSpeedMultiplier() / 3.0f),
-						getMaterial().getEnchantability() / 5.0f);
+						(int) Math.floor(getMaterial().getEnchantability() / 1.3f),
+						0.31f);
 				user.getWorld().playSound(null, user.getBlockPos(), SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
 			}
 
@@ -52,13 +53,27 @@ public abstract class SwordChomperMixin extends ToolItem {
 		// todo - try to use different texture w/o blade instead?
 		stack.decrementUnlessCreative(1, user);
 		if (user instanceof PlayerEntity player && !player.isInCreativeMode()) {
-			ItemStack remnant = Items.STICK.getDefaultStack();
+			Item remnant = switch (this.getMaterial()) {
+                case ToolMaterials.WOOD -> MawItems.CHOMPED_WOODEN_SWORD;
+                case ToolMaterials.STONE -> MawItems.CHOMPED_STONE_SWORD;
+                case ToolMaterials.IRON -> MawItems.CHOMPED_IRON_SWORD;
+                case ToolMaterials.GOLD -> MawItems.CHOMPED_GOLDEN_SWORD;
+                case ToolMaterials.DIAMOND -> MawItems.CHOMPED_DIAMOND_SWORD;
+                case ToolMaterials.NETHERITE -> MawItems.CHOMPED_NETHERITE_SWORD;
+                default -> Items.STICK;
+            };
+
+			// look... it's perfect code (there's a private copy that ignores empty, but i don't wanna widen)
+			stack.increment(1);
+			ItemStack newStack = stack.copyComponentsToNewStack(remnant, 1);
+			stack.decrement(1);
+
 			if (stack.isEmpty()) {
-				return remnant.copy();
+				return newStack;
 			}
 
 			if (!player.getWorld().isClient()) {
-				player.getInventory().insertStack(remnant.copy());
+				player.getInventory().insertStack(newStack);
 			}
 		}
 		return stack;

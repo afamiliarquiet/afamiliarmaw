@@ -183,4 +183,6 @@ public class BreathProjectileEntity extends ThrownEntity {
         float size = agePercent * agePercent + 0.05f;
         return EntityDimensions.changing(size, size);
     }
+
+    // todo - maybe add collisions? would kinda look nicer but probably substantially more expensive, given how many of these there are
 }

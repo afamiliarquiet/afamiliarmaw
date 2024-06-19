@@ -36,6 +36,8 @@ public class MagnificentMaw implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
+		// todo - add advancements maybe? chomping an enchanted+named item, transforming?
+
 		MawPackets.registerC2SPayloads();
 		MawPackets.registerC2SReceivers();
 		MawEntities.register();

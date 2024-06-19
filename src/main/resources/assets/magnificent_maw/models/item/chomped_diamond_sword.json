@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "magnificent_maw:item/chomped_diamond_sword"
+  }
+}
