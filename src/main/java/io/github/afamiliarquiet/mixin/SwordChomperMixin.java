@@ -14,7 +14,7 @@ import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 
-import static io.github.afamiliarquiet.MawUtils.stripDraconicTf;
+import static io.github.afamiliarquiet.util.MawUtils.stripDraconicTf;
 
 @Mixin(SwordItem.class)
 public abstract class SwordChomperMixin extends ToolItem {
@@ -49,6 +49,7 @@ public abstract class SwordChomperMixin extends ToolItem {
 			}
 		}
 
+		// todo - try to use different texture w/o blade instead?
 		stack.decrementUnlessCreative(1, user);
 		if (user instanceof PlayerEntity player && !player.isInCreativeMode()) {
 			ItemStack remnant = Items.STICK.getDefaultStack();

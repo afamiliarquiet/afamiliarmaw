@@ -17,6 +17,7 @@ public class MawItems {
     public static void register() {
         Registry.register(Registries.ITEM, CURIOUS_VIAL_ID, CURIOUS_VIAL);
 
+        // todo - add source for curious vial - vaults? wandering traders?
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.FOOD_AND_DRINK).register(
                 content -> content.addAfter(Items.OMINOUS_BOTTLE, CURIOUS_VIAL)
         );

@@ -1,6 +1,7 @@
 package io.github.afamiliarquiet.network;
 
 import io.github.afamiliarquiet.MagnificentMaw;
+import io.github.afamiliarquiet.util.MawBearer;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -21,7 +22,7 @@ public class BreathPacket implements CustomPayload {
 
     public static void receive(BreathPacket payload, ServerPlayNetworking.Context context) {
         if (context.player() instanceof MawBearer mawBearer) {
-            mawBearer.maw$setBreathing(payload.shouldBreathe());
+            mawBearer.magnificent_maw$setBreathing(payload.shouldBreathe());
         }
     }
 

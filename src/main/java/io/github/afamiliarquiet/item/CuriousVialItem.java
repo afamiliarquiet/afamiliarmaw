@@ -24,8 +24,8 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.Objects;
 
-import static io.github.afamiliarquiet.MawUtils.getDraconicOmenEntry;
-import static io.github.afamiliarquiet.MawUtils.isDraconicTfed;
+import static io.github.afamiliarquiet.util.MawUtils.getDraconicOmenEntry;
+import static io.github.afamiliarquiet.util.MawUtils.isDraconicTfed;
 
 public class CuriousVialItem extends Item {
 

@@ -1,7 +1,7 @@
-package io.github.afamiliarquiet;
+package io.github.afamiliarquiet.util;
 
+import io.github.afamiliarquiet.MagnificentMaw;
 import io.github.afamiliarquiet.entity.MawEntities;
-import io.github.afamiliarquiet.network.MawBearer;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
@@ -57,7 +57,7 @@ public class MawUtils {
     // todo - maybe make my own soundevents for subtitle purposes
     public static void applyDraconicTf(LivingEntity entity) {
         if (entity instanceof MawBearer morpher) {
-            morpher.maw$setMetamorphosized(true);
+            morpher.magnificent_maw$setMetamorphosized(true);
             poof(entity, ParticleTypes.FLAME);
             entity.removeStatusEffect(getDraconicOmenEntry(entity.getWorld()));
 
@@ -70,8 +70,8 @@ public class MawUtils {
     }
 
     public static void stripDraconicTf(LivingEntity entity) {
-        if (entity instanceof MawBearer morpher) {
-            morpher.maw$setMetamorphosized(false);
+        if (entity instanceof MawBearer morpher && morpher.magnificent_maw$isMetamorphosized()) {
+            morpher.magnificent_maw$setMetamorphosized(false);
             poof(entity);
 
             if (entity instanceof PlayerEntity player) {
@@ -105,7 +105,7 @@ public class MawUtils {
 
     public static boolean isDraconicTfed(LivingEntity entity) {
         if (entity instanceof MawBearer morpher) {
-            return morpher.maw$getMetamorphosized();
+            return morpher.magnificent_maw$isMetamorphosized();
         } else {
             return false;
         }

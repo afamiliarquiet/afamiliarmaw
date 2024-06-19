@@ -4,7 +4,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 
-import static io.github.afamiliarquiet.MawUtils.applyDraconicTf;
+import static io.github.afamiliarquiet.util.MawUtils.applyDraconicTf;
 
 public class DraconicOmenStatusEffect extends StatusEffect {
     public DraconicOmenStatusEffect() {
