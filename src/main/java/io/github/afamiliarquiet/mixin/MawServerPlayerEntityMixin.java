@@ -13,11 +13,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static io.github.afamiliarquiet.AFamiliarMaw.TF_TAG;
-import static io.github.afamiliarquiet.MawUtils.consumePyrexia;
+import static io.github.afamiliarquiet.MagnificentMaw.TF_TAG;
+import static io.github.afamiliarquiet.MawUtils.consumeDraconicOmen;
 
 @Mixin(ServerPlayerEntity.class)
-public class ALittlePlayerBooleanMixin implements MawBearer {
+public class MawServerPlayerEntityMixin implements MawBearer {
     // copycode copycat! i think the appeal of maw$ is to better insist uniqueness so no conflict?
     // doesn't help the swordchompermixin that's still likely a mess but maybe this is good
     // if it wasn't clear i have no idea what i'm doing with mixins. but this seems to work.
@@ -26,6 +26,7 @@ public class ALittlePlayerBooleanMixin implements MawBearer {
     // now there's logic so it's not just a mixin for a boolean!
     @Unique
     private boolean maw$metamorphosized;
+    // todo - can i throw this in a datatracker instead? does that let it hand off to client? idk
 
     @Unique
     private boolean maw$breathing;
@@ -62,8 +63,8 @@ public class ALittlePlayerBooleanMixin implements MawBearer {
             breathProjectileEntity.setPosition(breathProjectileEntity.getPos().add(player.getRotationVector().multiply(0.5)).addRandom(player.getRandom(), 0.013f));
             player.getServerWorld().spawnEntity(breathProjectileEntity);
 
-            consumePyrexia(player);
-            player.getWorld().playSound(null, player.getBlockPos(), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 0.2f, (player.getRandom().nextFloat() * 0.13f + 1.0f));
+            consumeDraconicOmen(player);
+            player.getWorld().playSound(null, player.getBlockPos(), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 0.13f, (player.getRandom().nextFloat() * 0.13f + 1.0f));
         }
     }
 

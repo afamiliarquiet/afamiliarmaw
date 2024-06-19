@@ -14,7 +14,7 @@ import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 
-import static io.github.afamiliarquiet.MawUtils.stripPyrexiaTf;
+import static io.github.afamiliarquiet.MawUtils.stripDraconicTf;
 
 @Mixin(SwordItem.class)
 public abstract class SwordChomperMixin extends ToolItem {
@@ -45,7 +45,7 @@ public abstract class SwordChomperMixin extends ToolItem {
 			}
 
 			if (getMaterial().equals(ToolMaterials.IRON)) {
-				stripPyrexiaTf(user);
+				stripDraconicTf(user);
 			}
 		}
 

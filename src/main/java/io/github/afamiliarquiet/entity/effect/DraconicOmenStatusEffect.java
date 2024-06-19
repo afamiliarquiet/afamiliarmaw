@@ -4,7 +4,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 
-import static io.github.afamiliarquiet.MawUtils.applyPyrexiaTf;
+import static io.github.afamiliarquiet.MawUtils.applyDraconicTf;
 
 public class DraconicOmenStatusEffect extends StatusEffect {
     public DraconicOmenStatusEffect() {
@@ -14,7 +14,7 @@ public class DraconicOmenStatusEffect extends StatusEffect {
     @Override
     public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
         if (!entity.getWorld().isClient()) {
-            applyPyrexiaTf(entity);
+            applyDraconicTf(entity);
         }
         return true;
     }

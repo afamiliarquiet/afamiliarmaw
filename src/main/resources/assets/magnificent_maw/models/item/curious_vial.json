@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "afamiliarmaw:item/curious_vial"
+    "layer0": "magnificent_maw:item/curious_vial"
   }
 }

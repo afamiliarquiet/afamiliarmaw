@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static io.github.afamiliarquiet.MawKeybinds.breatheKey;
 
-public class AFamiliarMawClient implements ClientModInitializer {
+public class MagnificentMawClient implements ClientModInitializer {
 
 
 

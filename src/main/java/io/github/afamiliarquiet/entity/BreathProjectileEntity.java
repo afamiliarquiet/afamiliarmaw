@@ -1,6 +1,5 @@
 package io.github.afamiliarquiet.entity;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
@@ -172,11 +171,6 @@ public class BreathProjectileEntity extends ThrownEntity {
                 }
             }
         }
-    }
-
-    @Override
-    protected void onBlockCollision(BlockState state) {
-        super.onBlockCollision(state);
     }
 
     @Override

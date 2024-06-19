@@ -1,6 +1,6 @@
 {
 	"schemaVersion": 1,
-	"id": "afamiliarmaw",
+	"id": "magnificent_maw",
 	"version": "${version}",
 	"name": "the Magnificent Maw",
 	"description": "a Curious Vial, and a few tricks with your Maw. remember to Breathe!",
@@ -8,27 +8,27 @@
 		"afamiliarquiet"
 	],
 	"contact": {
-		"homepage": "https://github.com/afamiliarquiet/afamiliarmaw",
-		"sources": "https://github.com/afamiliarquiet/afamiliarmaw"
+		"homepage": "https://github.com/afamiliarquiet/magnificent-maw",
+		"sources": "https://github.com/afamiliarquiet/magnificent-maw"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/afamiliarmaw/icon.png",
+	"icon": "assets/magnificent_maw/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-          "io.github.afamiliarquiet.AFamiliarMaw"
+			"io.github.afamiliarquiet.MagnificentMaw"
 		],
 		"client": [
-			"io.github.afamiliarquiet.AFamiliarMawClient"
+			"io.github.afamiliarquiet.MagnificentMawClient"
 		],
 		"fabric-datagen": [
-			"io.github.afamiliarquiet.AFamiliarMawDataGenerator"
+			"io.github.afamiliarquiet.MagnificentMawDataGenerator"
 		]
 	},
 	"mixins": [
-		"afamiliarmaw.mixins.json",
+		"magnificent_maw.mixins.json",
 		{
-			"config": "afamiliarmaw.client.mixins.json",
+			"config": "magnificent_maw.client.mixins.json",
 			"environment": "client"
 		}
 	],

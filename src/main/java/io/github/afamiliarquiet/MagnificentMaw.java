@@ -12,22 +12,22 @@ import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AFamiliarMaw implements ModInitializer {
+public class MagnificentMaw implements ModInitializer {
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.
 	// That way, it's clear which mod wrote info, warnings, and errors.
-	public static final String MOD_ID = "afamiliarmaw";
+	public static final String MOD_ID = "magnificent_maw";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	// don't wanna deal with mixins and don't want to add much so.. i'm gonna cheat a little and use command tags. nyeh
-	public static final String TF_TAG = "afamiliarmaw:metamorphosized";
+	public static final String TF_TAG = MOD_ID + ":metamorphosized";
 
 	// todo - descriptions for mods such as emi?
-	public static final TagKey<Enchantment> FIERY_ENCHANTMENTS = TagKey.of(RegistryKeys.ENCHANTMENT, getNamespacedIdentifier("fiery_enchantments"));
-	public static final TagKey<Item> FIERY_ITEMS = TagKey.of(RegistryKeys.ITEM, getNamespacedIdentifier("fiery_items"));
+	public static final TagKey<Enchantment> FIERY_ENCHANTMENTS = TagKey.of(RegistryKeys.ENCHANTMENT, id("fiery_enchantments"));
+	public static final TagKey<Item> FIERY_ITEMS = TagKey.of(RegistryKeys.ITEM, id("fiery_items"));
 
-	public static Identifier getNamespacedIdentifier(String id) {
-		return Identifier.of(MOD_ID, id);
+	public static Identifier id(String name) {
+		return Identifier.of(MOD_ID, name);
 	}
 
 	@Override
@@ -40,7 +40,5 @@ public class AFamiliarMaw implements ModInitializer {
 		MawPackets.registerC2SReceivers();
 		MawEntities.register();
 		MawItems.register();
-
-		LOGGER.info("Hello Fabric world!");
 	}
 }

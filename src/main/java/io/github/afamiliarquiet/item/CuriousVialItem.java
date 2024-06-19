@@ -1,6 +1,5 @@
 package io.github.afamiliarquiet.item;
 
-import io.github.afamiliarquiet.AFamiliarMaw;
 import io.github.afamiliarquiet.entity.MawEntities;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.component.type.PotionContentsComponent;
@@ -25,7 +24,8 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.Objects;
 
-import static io.github.afamiliarquiet.MawUtils.getPyrexiaEntry;
+import static io.github.afamiliarquiet.MawUtils.getDraconicOmenEntry;
+import static io.github.afamiliarquiet.MawUtils.isDraconicTfed;
 
 public class CuriousVialItem extends Item {
 
@@ -41,13 +41,13 @@ public class CuriousVialItem extends Item {
         }
 
         if (!world.isClient) {
-            if (user.getCommandTags().contains(AFamiliarMaw.TF_TAG) && user instanceof PlayerEntity player) {
-                player.getHungerManager().add(1, 1.0F);
+            if (isDraconicTfed(user) && user instanceof PlayerEntity player) {
+                player.getHungerManager().add(1, 1.3F);
             } else {
-                RegistryEntry<StatusEffect> pyrexiaEntry = getPyrexiaEntry(user.getWorld());
-                StatusEffectInstance effectInstance = user.getStatusEffect(pyrexiaEntry);
+                RegistryEntry<StatusEffect> draconicOmenEntry = getDraconicOmenEntry(user.getWorld());
+                StatusEffectInstance effectInstance = user.getStatusEffect(draconicOmenEntry);
                 int currentDuration = effectInstance == null ? 0 : effectInstance.getDuration();
-                user.addStatusEffect(new StatusEffectInstance(pyrexiaEntry, 1200 + currentDuration, 0, false, false, true));
+                user.addStatusEffect(new StatusEffectInstance(draconicOmenEntry, 1200 + currentDuration, 0, false, false, true));
             }
             world.playSound(null, user.getBlockPos(), SoundEvents.ITEM_OMINOUS_BOTTLE_DISPOSE, user.getSoundCategory(), 1.0F, 1.0F);
         }

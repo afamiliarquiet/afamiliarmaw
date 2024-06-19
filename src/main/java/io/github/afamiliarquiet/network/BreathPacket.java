@@ -1,12 +1,12 @@
 package io.github.afamiliarquiet.network;
 
+import io.github.afamiliarquiet.MagnificentMaw;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 
-import static io.github.afamiliarquiet.AFamiliarMaw.LOGGER;
-import static io.github.afamiliarquiet.AFamiliarMaw.getNamespacedIdentifier;
+import static io.github.afamiliarquiet.MagnificentMaw.LOGGER;
 
 public class BreathPacket implements CustomPayload {
     // todo - either properly implement start/stop or just remove it
@@ -16,7 +16,7 @@ public class BreathPacket implements CustomPayload {
     }
     private final Mode mode;
 
-    public static final Id<BreathPacket> ID = new CustomPayload.Id<>(getNamespacedIdentifier("breath"));
+    public static final Id<BreathPacket> ID = new CustomPayload.Id<>(MagnificentMaw.id("breath"));
     public static final PacketCodec<PacketByteBuf, BreathPacket> CODEC = PacketCodec.of(BreathPacket::write, BreathPacket::new);
 
     public static void receive(BreathPacket payload, ServerPlayNetworking.Context context) {

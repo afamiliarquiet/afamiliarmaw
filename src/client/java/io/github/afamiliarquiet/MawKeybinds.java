@@ -7,10 +7,10 @@ import org.lwjgl.glfw.GLFW;
 
 public class MawKeybinds {
     public static final KeyBinding breatheKey = new KeyBinding(
-            "key.afamiliarmaw.breathe",
+            "key.magnificent_maw.breathe",
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_B,
-            "category.afamiliarmaw.maw"
+            "category.magnificent_maw.maw"
     );
 
     public static void register() {
