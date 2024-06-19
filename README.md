@@ -1,4 +1,4 @@
-# the Magnificent Fire-Breathing Sword-Swallowing Maw
+# the Magnificent Fire-Breathing Sword-Swallowing Maw!
 
 ---
 ### Made for [ModFest: Carnival](https://modfest.net/carnival)!
