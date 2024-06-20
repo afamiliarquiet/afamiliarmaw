@@ -8,4 +8,8 @@ public interface MawBearer {
     void magnificent_maw$setBreathing(boolean breathing);
 
     boolean magnificent_maw$isBreathing();
+
+    void magnificent_maw$setFuelled(boolean fuelled);
+
+    boolean magnificent_maw$isFuelled();
 }

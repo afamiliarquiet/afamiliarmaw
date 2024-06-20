@@ -19,8 +19,9 @@ public class MagnificentMaw implements ModInitializer {
 	public static final String MOD_ID = "magnificent_maw";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-	// don't wanna deal with mixins and don't want to add much so.. i'm gonna cheat a little and use command tags. nyeh
-	public static final String TF_TAG = MOD_ID + ":metamorphosized";
+	public static final String TF_TAG = MOD_ID + "_metamorphosized";
+	public static final String BREATHING_TAG = MOD_ID + "_breathing";
+	public static final String FUELLED_TAG = MOD_ID + "_fuelled";
 
 	// todo - descriptions for mods such as emi?
 	public static final TagKey<Enchantment> FIERY_ENCHANTMENTS = TagKey.of(RegistryKeys.ENCHANTMENT, id("fiery_enchantments"));

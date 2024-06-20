@@ -36,6 +36,5 @@ public class MagnificentMawClient implements ClientModInitializer {
 		});
 
 		EntityRendererRegistry.register(MawEntities.BREATH_PROJECTILE_TYPE, EmptyEntityRenderer::new);
-
 	}
 }

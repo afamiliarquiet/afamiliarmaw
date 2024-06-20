@@ -17,6 +17,8 @@ import org.spongepowered.asm.mixin.Mixin;
 
 import static io.github.afamiliarquiet.util.MawUtils.stripDraconicTf;
 
+// it sounds like this whole thing should be practicing mixin inheritance from.. 2 parents? one on Item and a relay on ToolItem?
+// todo - do that maybe. and the other mixins
 @Mixin(SwordItem.class)
 public abstract class SwordChomperMixin extends ToolItem {
 	public SwordChomperMixin(ToolMaterial material, Item.Settings settings) {

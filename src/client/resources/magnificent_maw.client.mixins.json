@@ -1,10 +1,12 @@
 {
-	"required": true,
-	"package": "io.github.afamiliarquiet.mixin.client",
-	"compatibilityLevel": "JAVA_21",
-	"client": [
-	],
-	"injectors": {
-		"defaultRequire": 1
+  "required": true,
+  "package": "io.github.afamiliarquiet.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "HoldsUpPlayerEntityRendererMixin",
+    "SwordSwallowingRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
 	}
 }

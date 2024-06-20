@@ -21,17 +21,22 @@ import org.jetbrains.annotations.Nullable;
 
 public class MawUtils {
     public static boolean canBreathe(PlayerEntity player) {
-        RegistryEntry<StatusEffect> draconicOmenEntry = getDraconicOmenEntry(player.getWorld());
+        return isDraconicTfed(player) || canBreatheNaturally(player);
+    }
 
-        return isDraconicTfed(player)
-                || (draconicOmenEntry != null && player.hasStatusEffect(draconicOmenEntry)
-                    && (player.isOnFire()
-                        || player.getMainHandStack().isIn(MagnificentMaw.FIERY_ITEMS)
-                        || player.getOffHandStack().isIn(MagnificentMaw.FIERY_ITEMS)
-                        || EnchantmentHelper.hasAnyEnchantmentsIn(player.getMainHandStack(), MagnificentMaw.FIERY_ENCHANTMENTS)
-                        || EnchantmentHelper.hasAnyEnchantmentsIn(player.getOffHandStack(), MagnificentMaw.FIERY_ENCHANTMENTS)
-                    )
-                );
+    public static boolean canBreatheNaturally(PlayerEntity player) {
+        return isFuelled(player) && (player.isOnFire() || isHoldingIgnition(player));
+    }
+
+    public static boolean isHoldingIgnition(PlayerEntity player) {
+        return player.getMainHandStack().isIn(MagnificentMaw.FIERY_ITEMS)
+                || player.getOffHandStack().isIn(MagnificentMaw.FIERY_ITEMS)
+                || EnchantmentHelper.hasAnyEnchantmentsIn(player.getMainHandStack(), MagnificentMaw.FIERY_ENCHANTMENTS)
+                || EnchantmentHelper.hasAnyEnchantmentsIn(player.getOffHandStack(), MagnificentMaw.FIERY_ENCHANTMENTS);
+    }
+
+    public static boolean isFuelled(PlayerEntity player) {
+        return (player instanceof MawBearer mawBearer && mawBearer.magnificent_maw$isFuelled());
     }
 
     public static void consumeDraconicOmen(PlayerEntity player) {
