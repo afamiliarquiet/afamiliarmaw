@@ -24,7 +24,7 @@ public abstract class SwordChomperMixin extends ToolItem {
 	}
 
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-		if (user.canConsume(false) && user.getPitch() < -50f) {
+			if (user.canConsume(false)/* && user.getPitch() < -50f*/) {
 			return ItemUsage.consumeHeldItem(world, user, hand);
 		} else {
 			// todo - if i put super.use in here instead, is that twirl compat? idk!
@@ -40,6 +40,7 @@ public abstract class SwordChomperMixin extends ToolItem {
 		}
 		if (!world.isClient) {
 			if (user instanceof ServerPlayerEntity serverPlayerEntity) {
+				// sword quality = remaining durability * enchantability / 1.3
 				serverPlayerEntity.getHungerManager().add(
 						(int) Math.floor((getMaterial().getEnchantability() * (stack.getMaxDamage() - stack.getDamage())) / (1.3f * stack.getMaxDamage())),
 						0.31f);

@@ -25,7 +25,8 @@ you just get to eat swords. they're food.
 
 well.. the blades are, at least. the hilt area is better left untouched.
 
-(you will have to tilt your head back to fit it in your maw though)
+~~(you will have to tilt your head back to fit it in your maw though)~~
+don't worry about that nonsense, just chomp it into pieces before it pokes anything. you can trust me!
 
 ### ?. _Poof!_ Transformation!
 wait. what?
