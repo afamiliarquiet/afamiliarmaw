@@ -16,6 +16,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Util;
 import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -49,7 +50,6 @@ public class BreathProjectileEntity extends ThrownEntity {
         this.dataTracker.set(POTION_SWIRLS, list);
     }
 
-    // i'm not really sure if i need this stuff but whatever!
     @Override
     protected void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
@@ -185,5 +185,14 @@ public class BreathProjectileEntity extends ThrownEntity {
         return EntityDimensions.changing(size, size);
     }
 
-    // todo - maybe add collisions? would kinda look nicer but probably substantially more expensive, given how many of these there are
+    @Override
+    protected void onCollision(HitResult hitResult) {
+        super.onCollision(hitResult);
+
+        // better than going through blocks, but still not super nice looking..
+        // what i'd really like is to just kill the velocity in collision direction, but that seems like a lot.
+        if (!this.getWorld().isClient && hitResult.getType().equals(HitResult.Type.BLOCK)) {
+            this.discard();
+        }
+    }
 }
