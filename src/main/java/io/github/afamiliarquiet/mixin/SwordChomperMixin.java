@@ -27,6 +27,7 @@ public abstract class SwordChomperMixin extends ToolItem {
 		if (user.canConsume(false) && user.getPitch() < -50f) {
 			return ItemUsage.consumeHeldItem(world, user, hand);
 		} else {
+			// todo - if i put super.use in here instead, is that twirl compat? idk!
 			return TypedActionResult.fail(user.getStackInHand(hand));
 		}
 	}
@@ -40,9 +41,10 @@ public abstract class SwordChomperMixin extends ToolItem {
 		if (!world.isClient) {
 			if (user instanceof ServerPlayerEntity serverPlayerEntity) {
 				serverPlayerEntity.getHungerManager().add(
-						(int) Math.floor(getMaterial().getEnchantability() / 1.3f),
+						(int) Math.floor((getMaterial().getEnchantability() * (stack.getMaxDamage() - stack.getDamage())) / (1.3f * stack.getMaxDamage())),
 						0.31f);
 				user.getWorld().playSound(null, user.getBlockPos(), SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
+				user.getWorld().playSound(null, user.getBlockPos(), SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1.0F, world.random.nextFloat() * 0.1F + 0.9F);
 			}
 
 			if (getMaterial().equals(ToolMaterials.IRON)) {
@@ -67,6 +69,7 @@ public abstract class SwordChomperMixin extends ToolItem {
 			stack.increment(1);
 			ItemStack newStack = stack.copyComponentsToNewStack(remnant, 1);
 			stack.decrement(1);
+			// todo (but unlikely) - all this mess could be avoided if i just made a chomped component on itemstack i think.
 
 			if (stack.isEmpty()) {
 				return newStack;

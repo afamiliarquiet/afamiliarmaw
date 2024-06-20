@@ -133,6 +133,7 @@ public class BreathProjectileEntity extends ThrownEntity {
     protected void onEntityHit(EntityHitResult entityHitResult) {
         // in theory, extending Projectile means this won't
         // hit the breather or their attached entities
+        // todo - maybe add a blacklist of entities already hit like areaeffectcloud. idk if that'd really be very helpful tho
         super.onEntityHit(entityHitResult);
 
         if (this.getWorld().isClient()) {

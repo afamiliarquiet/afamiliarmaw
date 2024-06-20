@@ -11,7 +11,7 @@
 		"homepage": "https://github.com/afamiliarquiet/magnificent-maw",
 		"sources": "https://github.com/afamiliarquiet/magnificent-maw"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/magnificent_maw/icon.png",
 	"environment": "*",
 	"entrypoints": {
@@ -37,8 +37,5 @@
 		"minecraft": "~1.21-",
 		"java": ">=21",
 		"fabric-api": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
 	}
 }

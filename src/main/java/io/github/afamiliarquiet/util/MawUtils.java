@@ -64,7 +64,7 @@ public class MawUtils {
             if (entity instanceof PlayerEntity player) {
                 player.playSoundToPlayer(SoundEvents.BLOCK_END_PORTAL_SPAWN, SoundCategory.PLAYERS, 0.1f, 1.3f);
                 entity.getWorld().playSound(null, entity.getBlockPos(), SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.PLAYERS, 0.5f, 1.3f);
-                player.sendMessage(Text.translatable("message.magnificent_maw.apply_tf").withColor(0xFFAA00), true);
+                player.sendMessage(Text.translatable("message.magnificent_maw.apply_tf").withColor(0x4fe7ac), true);
             }
         }
     }
@@ -77,7 +77,7 @@ public class MawUtils {
             if (entity instanceof PlayerEntity player) {
                 player.playSoundToPlayer(SoundEvents.BLOCK_ENDER_CHEST_OPEN, SoundCategory.PLAYERS, 0.7f, 0.7f);
                 entity.getWorld().playSound(null, entity.getBlockPos(), SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.PLAYERS, 0.5f, 0.7f);
-                player.sendMessage(Text.translatable("message.magnificent_maw.strip_tf").withColor(0xAAAAAA), true);
+                player.sendMessage(Text.translatable("message.magnificent_maw.strip_tf").withColor(0x4fe7ac), true);
             }
         }
     }
@@ -93,7 +93,7 @@ public class MawUtils {
 
             if (extraParticle != null) {
                 world.spawnParticles(extraParticle,
-                        entity.offsetX(0.5), entity.getBodyY(0.5), entity.offsetZ(0.5),
+                        entity.getX(), entity.getBodyY(0.5), entity.getZ(),
                         7, size.getLengthX()*0.75, size.getLengthY()*0.5, size.getLengthZ()*0.75, 0);
             }
         }
