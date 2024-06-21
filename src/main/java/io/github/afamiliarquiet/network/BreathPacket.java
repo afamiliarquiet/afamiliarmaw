@@ -10,7 +10,6 @@ import net.minecraft.network.packet.CustomPayload;
 import static io.github.afamiliarquiet.MagnificentMaw.LOGGER;
 
 public class BreathPacket implements CustomPayload {
-    // todo - either properly implement start/stop or just remove it
     public enum Mode {
         START_BREATHING,
         STOP_BREATHING

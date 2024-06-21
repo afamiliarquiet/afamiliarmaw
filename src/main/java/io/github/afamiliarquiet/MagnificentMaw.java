@@ -26,6 +26,8 @@ public class MagnificentMaw implements ModInitializer {
 	// todo - descriptions for mods such as emi?
 	public static final TagKey<Enchantment> FIERY_ENCHANTMENTS = TagKey.of(RegistryKeys.ENCHANTMENT, id("fiery_enchantments"));
 	public static final TagKey<Item> FIERY_ITEMS = TagKey.of(RegistryKeys.ITEM, id("fiery_items"));
+	public static final TagKey<Item> EXTRANATURAL_REPELLENT = TagKey.of(RegistryKeys.ITEM, id("extranatural_repellent"));
+	public static final TagKey<Item> SWORDLY_SWALLOWABLE = TagKey.of(RegistryKeys.ITEM, id("swordly_swallowable"));
 
 	public static Identifier id(String name) {
 		return Identifier.of(MOD_ID, name);

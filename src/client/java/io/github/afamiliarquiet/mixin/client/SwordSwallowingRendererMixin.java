@@ -1,5 +1,6 @@
 package io.github.afamiliarquiet.mixin.client;
 
+import io.github.afamiliarquiet.MagnificentMaw;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.feature.HeldItemFeatureRenderer;
@@ -13,7 +14,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
 import net.minecraft.util.Arm;
 import net.minecraft.util.math.RotationAxis;
 import org.spongepowered.asm.mixin.Final;
@@ -35,14 +35,15 @@ public abstract class SwordSwallowingRendererMixin<T extends PlayerEntity, M ext
     @Shadow
     private final HeldItemRenderer playerHeldItemRenderer;
 
-    public SwordSwallowingRendererMixin(FeatureRendererContext<T, M> context, HeldItemRenderer heldItemRenderer, HeldItemRenderer playerHeldItemRenderer) {
+    public SwordSwallowingRendererMixin(FeatureRendererContext<T, M> context, HeldItemRenderer heldItemRenderer) {
         super(context, heldItemRenderer);
-        this.playerHeldItemRenderer = playerHeldItemRenderer;
+        this.playerHeldItemRenderer = heldItemRenderer;
     }
 
+    // relies on the item using the handheld model. if it doesn't... it's gonna be funky. don't do that.
     @Inject(at = @At("HEAD"), method = "renderItem", cancellable = true)
     private void renderItem(LivingEntity entity, ItemStack stack, ModelTransformationMode transformationMode, Arm arm, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-        if (stack.getItem() instanceof SwordItem && entity.getActiveItem() == stack && entity.getItemUseTimeLeft() > 0) {
+        if (stack.isIn(MagnificentMaw.SWORDLY_SWALLOWABLE) && entity.getActiveItem() == stack && entity.getItemUseTimeLeft() > 0) {
             // oh good lird i have to deal with quats now
 
             matrices.push();

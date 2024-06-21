@@ -134,8 +134,6 @@ public class BreathProjectileEntity extends ThrownEntity {
 
     @Override
     protected void onEntityHit(EntityHitResult entityHitResult) {
-        // in theory, extending Projectile means this won't
-        // hit the breather or their attached entities
         // todo - maybe add a blacklist of entities already hit like areaeffectcloud. idk if that'd really be very helpful tho
         super.onEntityHit(entityHitResult);
 
@@ -151,14 +149,14 @@ public class BreathProjectileEntity extends ThrownEntity {
         // (tho it sounds like pvp will be on for the fest so this won't matter but whatever!!!
         // the point is you shouldn't try to burn pets. i could just make that always the case actually but.. ehhhh. eh.)
         // ok well it looks like i did eventually make it so pets never get harmed. maybe. cool!
-        boolean skipBadStuff = (!(entity.getWorld().getServer() != null && entity.getWorld().getServer().isPvpEnabled()) &&
+        boolean beNice = (!(entity.getWorld().getServer() != null && entity.getWorld().getServer().isPvpEnabled()) &&
                 entity instanceof PlayerEntity ||
                 entity instanceof TameableEntity possiblePet && possiblePet.isTamed());
 
         // dunno if these checks for fire/splash immunity are necessary but..
         // it's good to be respectful to the entity's wishes anyway
         if (!entity.isFireImmune()) {
-            entity.setOnFireForTicks(skipBadStuff ? 13 : 20);
+            entity.setOnFireForTicks(beNice ? 13 : 20);
         }
 
         if (entity instanceof LivingEntity) {
@@ -169,7 +167,7 @@ public class BreathProjectileEntity extends ThrownEntity {
                 // maybe source should be the owner of this instead? idk
                 for (StatusEffectInstance statusEffect : this.statusEffects) {
                     if (livingEntity.canHaveStatusEffect(statusEffect) &&
-                            !(skipBadStuff && statusEffect.getEffectType().value().getCategory().equals(StatusEffectCategory.HARMFUL))) {
+                            !(beNice && statusEffect.getEffectType().value().getCategory().equals(StatusEffectCategory.HARMFUL))) {
                         livingEntity.addStatusEffect(new StatusEffectInstance(statusEffect), this);
                     }
                 }
@@ -180,9 +178,6 @@ public class BreathProjectileEntity extends ThrownEntity {
     @Override
     public EntityDimensions getDimensions(EntityPose pose) {
         // bigger... BIGGER (vwoosh)
-        // this actually feels like a nice way of getting the expanding fireball effect!
-        // is it more expensive than maybe would be reasonable? (and like everything else,)
-        // idk! find out when someone reads this and says "well there's yer problem"!
         float agePercent = this.age / (float) MAX_AGE;
         float size = agePercent * agePercent + 0.05f;
         return EntityDimensions.changing(size, size);

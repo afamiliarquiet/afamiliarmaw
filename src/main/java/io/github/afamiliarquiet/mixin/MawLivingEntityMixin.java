@@ -1,15 +1,18 @@
 package io.github.afamiliarquiet.mixin;
 
+import io.github.afamiliarquiet.MagnificentMaw;
 import io.github.afamiliarquiet.entity.BreathProjectileEntity;
 import io.github.afamiliarquiet.util.MawBearer;
 import io.github.afamiliarquiet.util.MawUtils;
+import net.minecraft.component.type.FoodComponent;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -18,37 +21,39 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static io.github.afamiliarquiet.MagnificentMaw.*;
-import static io.github.afamiliarquiet.util.MawUtils.consumeDraconicOmen;
-import static io.github.afamiliarquiet.util.MawUtils.getDraconicOmenEntry;
+import static io.github.afamiliarquiet.util.MawUtils.*;
 
 @SuppressWarnings("WrongEntityDataParameterClass") // mmmmmmmm... probably fine..
-@Mixin(PlayerEntity.class)
-public abstract class MawServerPlayerEntityMixin extends LivingEntity implements MawBearer {
+@Mixin(LivingEntity.class)
+public abstract class MawLivingEntityMixin extends Entity implements MawBearer {
     // copycode copycat! i think the appeal of maw$ is to better insist uniqueness so no conflict?
-    // doesn't help the swordchompermixin that's still likely a mess but maybe this is good
     // if it wasn't clear i have no idea what i'm doing with mixins. but this seems to work.
     // also like surely i don't need to mixin to store a boolean. but whatever idk
-    // btw i'm trusting these to be false by default. wahoo? hehe
     // now there's logic so it's not just a mixin for a boolean!
+
+    @Shadow
+    private boolean effectsChanged;
 
     // these probably could (and should? but kinda minor issue) be a byte of flags instead?
     @Unique
-    private static final TrackedData<Boolean> magnificent_maw$BREATHING = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final TrackedData<Boolean> magnificent_maw$BREATHING = DataTracker.registerData(LivingEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
     @Unique
-    private static final TrackedData<Boolean> magnificent_maw$METAMORPHOSIZED = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final TrackedData<Boolean> magnificent_maw$METAMORPHOSIZED = DataTracker.registerData(LivingEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
     @Unique
-    private static final TrackedData<Boolean> magnificent_maw$FUELLED = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final TrackedData<Boolean> magnificent_maw$FUELLED = DataTracker.registerData(LivingEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
-    protected MawServerPlayerEntityMixin(EntityType<? extends PlayerEntity> entityType, World world) {
-        super(entityType, world);
+    public MawLivingEntityMixin(EntityType<?> type, World world) {
+        super(type, world);
     }
 
     @Inject(at = @At("TAIL"), method = "initDataTracker")
@@ -78,7 +83,7 @@ public abstract class MawServerPlayerEntityMixin extends LivingEntity implements
         }
     }
 
-    // weirder to deal with when not directly injectingi. gonna ignore and hope its ok!
+    // weirder to deal with when not directly injecting. gonna ignore and hope its ok! maybe not great, but ok
 //    @Inject(at = @At("TAIL"), method = "copyFrom")
 //    private void copyFrom(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfo ci) {
 //        if (oldPlayer instanceof MawBearer oldMorpher) {
@@ -86,47 +91,53 @@ public abstract class MawServerPlayerEntityMixin extends LivingEntity implements
 //        }
 //    }
 
-    @Inject(at = @At("TAIL"), method = "tick")
+    @Inject(at = @At("HEAD"), method = "tick")
     private void tick(CallbackInfo ci) {
         // this feels fishy.
-        PlayerEntity player = (PlayerEntity)(Object)this;
-        World world = player.getWorld();
+        LivingEntity livingEntity = (LivingEntity)(Object)this;
+        World world = livingEntity.getWorld();
 
 
-        if (player.getWorld().isClient()) {
+        if (livingEntity.getWorld().isClient()) {
             if (magnificent_maw$isMetamorphosized() && random.nextFloat() < 0.013) {
                 world.addParticle(ParticleTypes.FLAME,
-                        player.getParticleX(0.5), player.getRandomBodyY(), player.getParticleZ(0.5),
+                        livingEntity.getParticleX(0.5), livingEntity.getRandomBodyY(), livingEntity.getParticleZ(0.5),
                         (random.nextFloat() - 0.5) * 0.031, random.nextFloat() * 0.031, (random.nextFloat() - 0.5) * 0.031);
             }
         } else {
-            if (magnificent_maw$isBreathing() && MawUtils.canBreathe(player)) {
-                BreathProjectileEntity breathProjectileEntity = new BreathProjectileEntity(player, world);
-                breathProjectileEntity.setVelocity(player, player.getPitch(), player.getYaw(), 0.0F, 0.5F, 13F);
-                breathProjectileEntity.setPosition(breathProjectileEntity.getPos().add(player.getRotationVector().multiply(0.5)).addRandom(player.getRandom(), 0.013f));
+            if (magnificent_maw$isBreathing() && MawUtils.canBreathe(livingEntity)) {
+                BreathProjectileEntity breathProjectileEntity = new BreathProjectileEntity(livingEntity, world);
+                breathProjectileEntity.setVelocity(livingEntity, livingEntity.getPitch(), livingEntity.getYaw(), 0.0F, 0.5F, 13F);
+                breathProjectileEntity.setPosition(breathProjectileEntity.getPos().add(livingEntity.getRotationVector().multiply(0.5)).addRandom(livingEntity.getRandom(), 0.013f));
                 world.spawnEntity(breathProjectileEntity);
 
-                consumeDraconicOmen(player);
-                Vec3d p = player.getPos();
-                world.playSound(null, p.x, p.y, p.z, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 0.2f, (player.getRandom().nextFloat() * 0.13f + 1.0f));
+                consumeDraconicOmen(livingEntity);
+                Vec3d p = livingEntity.getPos();
+                world.playSound(null, p.x, p.y, p.z, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 0.2f, (livingEntity.getRandom().nextFloat() * 0.13f + 1.0f));
+            }
+
+            if (this.effectsChanged) {
+                RegistryEntry<StatusEffect> draconicOmenEntry = getDraconicOmenEntry(this.getWorld());
+                boolean hasDraconicOmen = draconicOmenEntry != null && livingEntity.hasStatusEffect(draconicOmenEntry);
+
+                if (hasDraconicOmen != magnificent_maw$isFuelled()) {
+                    magnificent_maw$setFuelled(hasDraconicOmen);
+                }
             }
         }
     }
 
-    // you shouldn't do this. don't copy me. idk what i'm doing when i'm overriding stuff in mixins but it's probably bad for compat
-    // ok i know a little bit what i'm doing here and yeah don't do this. have a parent mixin target this and override that?
-    // i'm not gonna do that though! not unless i have to!! which i may!!!
-    // but like yeah this is not the right place for this. whatever! i just want to take advantage of the status effects changed thing..
-    @Override
-    protected void updatePotionVisibility() {
-        super.updatePotionVisibility();
+    @Inject(at = @At("HEAD"), method = "eatFood")
+    private void eatFood(World world, ItemStack stack, FoodComponent foodComponent, CallbackInfoReturnable<ItemStack> cir) {
+        if (!world.isClient) {
+            if (stack.isIn(MagnificentMaw.SWORDLY_SWALLOWABLE)) {
+                Vec3d p = this.getPos();
+                this.getWorld().playSound(null, p.x, p.y, p.z, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1.0F, world.random.nextFloat() * 0.1F + 0.9F);
+            }
 
-        if (!this.getWorld().isClient()) {
-            RegistryEntry<StatusEffect> draconicOmenEntry = getDraconicOmenEntry(this.getWorld());
-            boolean hasDraconicOmen = draconicOmenEntry != null && this.hasStatusEffect(draconicOmenEntry);
 
-            if (hasDraconicOmen != magnificent_maw$isFuelled()) {
-                magnificent_maw$setFuelled(hasDraconicOmen);
+            if (stack.isIn(MagnificentMaw.EXTRANATURAL_REPELLENT)) {
+                stripDraconicTf((LivingEntity)(Object)this);
             }
         }
     }

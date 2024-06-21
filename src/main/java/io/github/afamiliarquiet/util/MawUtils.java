@@ -21,36 +21,36 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class MawUtils {
-    public static boolean canBreathe(PlayerEntity player) {
-        return isDraconicTfed(player) || canBreatheNaturally(player);
+    public static boolean canBreathe(LivingEntity entity) {
+        return isDraconicTfed(entity) || canBreatheNaturally(entity);
     }
 
-    public static boolean canBreatheNaturally(PlayerEntity player) {
-        return isFuelled(player) && (player.isOnFire() || isHoldingIgnition(player));
+    public static boolean canBreatheNaturally(LivingEntity entity) {
+        return isFuelled(entity) && (entity.isOnFire() || isHoldingIgnition(entity));
     }
 
-    public static boolean isHoldingIgnition(PlayerEntity player) {
-        return player.getMainHandStack().isIn(MagnificentMaw.FIERY_ITEMS)
-                || player.getOffHandStack().isIn(MagnificentMaw.FIERY_ITEMS)
-                || EnchantmentHelper.hasAnyEnchantmentsIn(player.getMainHandStack(), MagnificentMaw.FIERY_ENCHANTMENTS)
-                || EnchantmentHelper.hasAnyEnchantmentsIn(player.getOffHandStack(), MagnificentMaw.FIERY_ENCHANTMENTS);
+    public static boolean isHoldingIgnition(LivingEntity entity) {
+        return entity.getMainHandStack().isIn(MagnificentMaw.FIERY_ITEMS)
+                || entity.getOffHandStack().isIn(MagnificentMaw.FIERY_ITEMS)
+                || EnchantmentHelper.hasAnyEnchantmentsIn(entity.getMainHandStack(), MagnificentMaw.FIERY_ENCHANTMENTS)
+                || EnchantmentHelper.hasAnyEnchantmentsIn(entity.getOffHandStack(), MagnificentMaw.FIERY_ENCHANTMENTS);
     }
 
-    public static boolean isFuelled(PlayerEntity player) {
-        return (player instanceof MawBearer mawBearer && mawBearer.magnificent_maw$isFuelled());
+    public static boolean isFuelled(LivingEntity entity) {
+        return (entity instanceof MawBearer mawBearer && mawBearer.magnificent_maw$isFuelled());
     }
 
-    public static void consumeDraconicOmen(PlayerEntity player) {
-        RegistryEntry<StatusEffect> draconicOmenEntry = getDraconicOmenEntry(player.getWorld());
+    public static void consumeDraconicOmen(LivingEntity entity) {
+        RegistryEntry<StatusEffect> draconicOmenEntry = getDraconicOmenEntry(entity.getWorld());
         if (draconicOmenEntry == null) {
             return;
         }
 
-        StatusEffectInstance oldInstance = player.getStatusEffect(draconicOmenEntry);
+        StatusEffectInstance oldInstance = entity.getStatusEffect(draconicOmenEntry);
         if (oldInstance != null) {
-            player.removeStatusEffect(draconicOmenEntry);
+            entity.removeStatusEffect(draconicOmenEntry);
             if (oldInstance.getDuration() > 31) {
-                player.addStatusEffect(new StatusEffectInstance(oldInstance.getEffectType(), oldInstance.getDuration() - 31, oldInstance.getAmplifier(), oldInstance.isAmbient(), oldInstance.shouldShowParticles(), oldInstance.shouldShowIcon()));
+                entity.addStatusEffect(new StatusEffectInstance(oldInstance.getEffectType(), oldInstance.getDuration() - 31, oldInstance.getAmplifier(), oldInstance.isAmbient(), oldInstance.shouldShowParticles(), oldInstance.shouldShowIcon()));
             }
         }
     }

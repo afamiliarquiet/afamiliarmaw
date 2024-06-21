@@ -3,7 +3,7 @@
   "package": "io.github.afamiliarquiet.mixin.client",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "HoldsUpPlayerEntityRendererMixin",
+    "MawPosesPlayerEntityRendererMixin",
     "SwordSwallowingRendererMixin"
   ],
   "injectors": {

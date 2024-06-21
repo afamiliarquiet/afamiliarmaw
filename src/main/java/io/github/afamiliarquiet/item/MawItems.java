@@ -1,10 +1,11 @@
 package io.github.afamiliarquiet.item;
 
+import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroups;
-import net.minecraft.item.Items;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.FoodComponent;
+import net.minecraft.item.*;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTables;
 import net.minecraft.loot.entry.ItemEntry;
@@ -13,6 +14,8 @@ import net.minecraft.loot.provider.number.UniformLootNumberProvider;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+
+import java.util.List;
 
 import static io.github.afamiliarquiet.MagnificentMaw.id;
 
@@ -53,7 +56,7 @@ public class MawItems {
         });
 
 
-
+        // todo - datagen? is that real?
         registerItem(CHOMPED_WOODEN_SWORD_ID, CHOMPED_WOODEN_SWORD);
         registerItem(CHOMPED_STONE_SWORD_ID, CHOMPED_STONE_SWORD);
         registerItem(CHOMPED_IRON_SWORD_ID, CHOMPED_IRON_SWORD);
@@ -65,6 +68,34 @@ public class MawItems {
                 content -> content.addBefore(Items.WOODEN_AXE, CHOMPED_WOODEN_SWORD, CHOMPED_STONE_SWORD,
                         CHOMPED_IRON_SWORD, CHOMPED_GOLDEN_SWORD, CHOMPED_DIAMOND_SWORD, CHOMPED_NETHERITE_SWORD)
         );
+
+
+        List<Item> vanillaSwallowables = List.of(Items.WOODEN_SWORD, Items.STONE_SWORD, Items.IRON_SWORD,
+                Items.GOLDEN_SWORD, Items.DIAMOND_SWORD, Items.NETHERITE_SWORD);
+
+
+        DefaultItemComponentEvents.MODIFY.register((context) ->
+                context.modify(vanillaSwallowables::contains, ((builder, item) -> {
+                    if (item instanceof SwordItem swordItem) {
+                        Item remnant = switch (swordItem.getMaterial()) {
+                            case ToolMaterials.WOOD -> MawItems.CHOMPED_WOODEN_SWORD;
+                            case ToolMaterials.STONE -> MawItems.CHOMPED_STONE_SWORD;
+                            case ToolMaterials.IRON -> MawItems.CHOMPED_IRON_SWORD;
+                            case ToolMaterials.GOLD -> MawItems.CHOMPED_GOLDEN_SWORD;
+                            case ToolMaterials.DIAMOND -> MawItems.CHOMPED_DIAMOND_SWORD;
+                            case ToolMaterials.NETHERITE -> MawItems.CHOMPED_NETHERITE_SWORD;
+                            default -> Items.STICK;
+                        };
+
+                        builder.add(DataComponentTypes.FOOD, (new FoodComponent.Builder())
+                                .nutrition((int) Math.floor((swordItem.getMaterial().getEnchantability() / (1.3f))))
+                                .saturationModifier(0.31f).usingConvertsTo(remnant).build());
+                    } else {
+                        // idk how we got here.
+                        builder.add(DataComponentTypes.FOOD, (new FoodComponent.Builder())
+                                .nutrition(2).saturationModifier(0.5f).build());
+                    }
+        })));
     }
 
     private static void registerItem(Identifier id, Item item) {

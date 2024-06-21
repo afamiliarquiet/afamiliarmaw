@@ -23,7 +23,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.List;
-import java.util.Objects;
 
 import static io.github.afamiliarquiet.util.MawUtils.getDraconicOmenEntry;
 import static io.github.afamiliarquiet.util.MawUtils.isDraconicTfed;
@@ -61,7 +60,7 @@ public class CuriousVialItem extends Item {
 
     @Override
     public int getMaxUseTime(ItemStack stack, LivingEntity user) {
-        return 13;
+        return 16; // snack
     }
 
     @Override
@@ -77,10 +76,11 @@ public class CuriousVialItem extends Item {
     @Override
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         super.appendTooltip(stack, context, tooltip, type);
+
         List<StatusEffectInstance> list = List.of(new StatusEffectInstance(RegistryEntry.of(
                 MawEntities.DRACONIC_OMEN_STATUS_EFFECT), 1200, 0,
                 false, false, true));
-        Objects.requireNonNull(tooltip);
+
         PotionContentsComponent.buildTooltip(list, tooltip::add, 1.0F, context.getUpdateTickRate());
     }
 }
