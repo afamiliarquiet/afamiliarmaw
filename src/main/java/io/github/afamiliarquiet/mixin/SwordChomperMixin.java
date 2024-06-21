@@ -12,6 +12,7 @@ import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 
@@ -46,8 +47,9 @@ public abstract class SwordChomperMixin extends ToolItem {
 				serverPlayerEntity.getHungerManager().add(
 						(int) Math.floor((getMaterial().getEnchantability() * (stack.getMaxDamage() - stack.getDamage())) / (1.3f * stack.getMaxDamage())),
 						0.31f);
-				user.getWorld().playSound(null, user.getBlockPos(), SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
-				user.getWorld().playSound(null, user.getBlockPos(), SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1.0F, world.random.nextFloat() * 0.1F + 0.9F);
+				Vec3d p = user.getPos();
+				user.getWorld().playSound(null, p.x, p.y, p.z, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
+				user.getWorld().playSound(null, p.x, p.y, p.z, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1.0F, world.random.nextFloat() * 0.1F + 0.9F);
 			}
 
 			if (getMaterial().equals(ToolMaterials.IRON)) {

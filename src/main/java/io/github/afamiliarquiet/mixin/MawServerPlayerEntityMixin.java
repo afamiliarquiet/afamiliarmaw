@@ -15,6 +15,7 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -86,7 +87,7 @@ public abstract class MawServerPlayerEntityMixin extends LivingEntity implements
 //    }
 
     @Inject(at = @At("TAIL"), method = "tick")
-    private void tickBreathing(CallbackInfo ci) {
+    private void tick(CallbackInfo ci) {
         // this feels fishy.
         PlayerEntity player = (PlayerEntity)(Object)this;
         World world = player.getWorld();
@@ -106,7 +107,8 @@ public abstract class MawServerPlayerEntityMixin extends LivingEntity implements
                 world.spawnEntity(breathProjectileEntity);
 
                 consumeDraconicOmen(player);
-                world.playSound(null, player.getBlockPos(), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 0.2f, (player.getRandom().nextFloat() * 0.13f + 1.0f));
+                Vec3d p = player.getPos();
+                world.playSound(null, p.x, p.y, p.z, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 0.2f, (player.getRandom().nextFloat() * 0.13f + 1.0f));
             }
         }
     }

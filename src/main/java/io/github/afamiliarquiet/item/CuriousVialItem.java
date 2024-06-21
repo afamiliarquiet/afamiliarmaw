@@ -19,6 +19,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -49,7 +50,9 @@ public class CuriousVialItem extends Item {
                 int currentDuration = effectInstance == null ? 0 : effectInstance.getDuration();
                 user.addStatusEffect(new StatusEffectInstance(draconicOmenEntry, 1200 + currentDuration, 0, false, false, true));
             }
-            world.playSound(null, user.getBlockPos(), SoundEvents.ITEM_OMINOUS_BOTTLE_DISPOSE, user.getSoundCategory(), 1.0F, 1.0F);
+
+            Vec3d p = user.getPos();
+            world.playSound(null, p.x, p.y, p.z, SoundEvents.ITEM_OMINOUS_BOTTLE_DISPOSE, user.getSoundCategory(), 1.0F, 1.0F);
         }
 
         stack.decrementUnlessCreative(1, user);

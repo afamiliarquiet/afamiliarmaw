@@ -17,6 +17,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Util;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -107,7 +108,9 @@ public class BreathProjectileEntity extends ThrownEntity {
                             0, 0.13, 0);
                 }
             }
-            this.getWorld().playSound(null, this.getBlockPos(),
+
+            Vec3d p = this.getPos();
+            this.getWorld().playSound(null, p.x, p.y, p.z,
                     SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS,
                     0.5f, (this.getRandom().nextFloat() * 0.1f + 0.4f));
         } else {
