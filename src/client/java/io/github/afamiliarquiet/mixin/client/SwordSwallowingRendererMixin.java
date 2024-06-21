@@ -48,22 +48,26 @@ public abstract class SwordSwallowingRendererMixin<T extends PlayerEntity, M ext
             matrices.push();
 
             boolean lefty = arm == Arm.LEFT;
-            int sign = lefty ? -1 : 1;
-            this.getContextModel().setArmAngle(arm, matrices);
-            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90.0f));
-            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180.0f));
-            matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(sign * 90.0f));
+            int handedSign = lefty ? 1 : -1;
 
-            matrices.translate((float)sign / 16.0f, 0.125f, -0.625f);
+            float pitchPercent = entity.getPitch();
 
-            float pitch = entity.getPitch();
-            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90.0F - Math.abs(pitch - 45f) * .25f));
-            matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(sign * (-20.0f - (pitch > 0 ? pitch * 0.5f : pitch) * .13f)));
-            // the .13f is kinda like (pitch / 90) * 13
+            pitchPercent = pitchPercent > 0 ? Math.min(pitchPercent, 75) : Math.max(pitchPercent, -75);
+            float pitchPerfect = (entity.getPitch() - pitchPercent);
+            pitchPercent = pitchPercent / 90;
 
-            matrices.translate(sign * 0.0625, -0.5625 + pitch * .0007, 0.125);
-            // .0007 is like 1 / (16 * 90)
-            // why am i not just writing these out? more magic numbers = more magical mod.
+            this.getContextModel().getHead().rotate(matrices);
+            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(112.5f - pitchPercent * 22.5f - pitchPerfect));
+            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(handedSign * 90f));
+            matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(0f));
+
+            float prcRemaining = entity.getItemUseTimeLeft() / 31f;
+            // x: down/up on face, y: in/out, z: left/right on face
+            matrices.translate(
+                    handedSign * ((2.5 - pitchPercent) * -.075),
+                    -0.625 - prcRemaining * 0.375,
+                    prcRemaining * .0875
+            );
 
             this.playerHeldItemRenderer.renderItem(entity, stack, transformationMode, lefty, matrices, vertexConsumers, light);
 
