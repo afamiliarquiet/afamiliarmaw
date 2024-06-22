@@ -65,7 +65,7 @@ public abstract class SwordSwallowingRendererMixin<T extends PlayerEntity, M ext
             float prcRemaining = entity.getItemUseTimeLeft() / 31f;
             // x: down/up on face, y: in/out, z: left/right on face
             matrices.translate(
-                    handedSign * ((2.5 - pitchPercent) * -.075),
+                    handedSign * ((2 - pitchPercent) * -.075),
                     -0.625 - prcRemaining * 0.375,
                     prcRemaining * .0875
             );
