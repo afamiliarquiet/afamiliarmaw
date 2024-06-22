@@ -106,14 +106,15 @@ public abstract class MawLivingEntityMixin extends Entity implements MawBearer {
             }
         } else {
             if (magnificent_maw$isBreathing() && MawUtils.canBreathe(livingEntity)) {
-                BreathProjectileEntity breathProjectileEntity = new BreathProjectileEntity(livingEntity, world);
-                breathProjectileEntity.setVelocity(livingEntity, livingEntity.getPitch(), livingEntity.getYaw(), 0.0F, 0.5F, 13F);
-                breathProjectileEntity.setPosition(breathProjectileEntity.getPos().add(livingEntity.getRotationVector().multiply(0.5)).addRandom(livingEntity.getRandom(), 0.013f));
-                world.spawnEntity(breathProjectileEntity);
+                if (consumeDraconicOmen(livingEntity)) {
+                    BreathProjectileEntity breathProjectileEntity = new BreathProjectileEntity(livingEntity, world);
+                    breathProjectileEntity.setVelocity(livingEntity, livingEntity.getPitch(), livingEntity.getYaw(), 0.0F, 0.5F, 13F);
+                    breathProjectileEntity.setPosition(breathProjectileEntity.getPos().add(livingEntity.getRotationVector().multiply(0.5)).addRandom(livingEntity.getRandom(), 0.013f));
+                    world.spawnEntity(breathProjectileEntity);
 
-                consumeDraconicOmen(livingEntity);
-                Vec3d p = livingEntity.getPos();
-                world.playSound(null, p.x, p.y, p.z, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 0.2f, (livingEntity.getRandom().nextFloat() * 0.13f + 1.0f));
+                    Vec3d p = livingEntity.getPos();
+                    world.playSound(null, p.x, p.y, p.z, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 0.2f, (livingEntity.getRandom().nextFloat() * 0.13f + 1.0f));
+                }
             }
 
             if (this.effectsChanged) {

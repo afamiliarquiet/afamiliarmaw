@@ -15,6 +15,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -30,29 +31,34 @@ public class MawUtils {
     }
 
     public static boolean isHoldingIgnition(LivingEntity entity) {
-        return entity.getMainHandStack().isIn(MagnificentMaw.FIERY_ITEMS)
-                || entity.getOffHandStack().isIn(MagnificentMaw.FIERY_ITEMS)
-                || EnchantmentHelper.hasAnyEnchantmentsIn(entity.getMainHandStack(), MagnificentMaw.FIERY_ENCHANTMENTS)
-                || EnchantmentHelper.hasAnyEnchantmentsIn(entity.getOffHandStack(), MagnificentMaw.FIERY_ENCHANTMENTS);
+        return isHoldingIgnition(entity, Hand.MAIN_HAND) || isHoldingIgnition(entity, Hand.OFF_HAND);
+    }
+
+    public static boolean isHoldingIgnition(LivingEntity entity, Hand hand) {
+        return entity.getStackInHand(hand).isIn(MagnificentMaw.FIERY_ITEMS)
+                || EnchantmentHelper.hasAnyEnchantmentsIn(entity.getStackInHand(hand), MagnificentMaw.FIERY_ENCHANTMENTS);
     }
 
     public static boolean isFuelled(LivingEntity entity) {
         return (entity instanceof MawBearer mawBearer && mawBearer.magnificent_maw$isFuelled());
     }
 
-    public static void consumeDraconicOmen(LivingEntity entity) {
+    public static boolean consumeDraconicOmen(LivingEntity entity) {
         RegistryEntry<StatusEffect> draconicOmenEntry = getDraconicOmenEntry(entity.getWorld());
         if (draconicOmenEntry == null) {
-            return;
+            return false;
         }
 
         StatusEffectInstance oldInstance = entity.getStatusEffect(draconicOmenEntry);
         if (oldInstance != null) {
             entity.removeStatusEffect(draconicOmenEntry);
-            if (oldInstance.getDuration() > 31) {
+            if (oldInstance.getDuration() > 31+13) {
                 entity.addStatusEffect(new StatusEffectInstance(oldInstance.getEffectType(), oldInstance.getDuration() - 31, oldInstance.getAmplifier(), oldInstance.isAmbient(), oldInstance.shouldShowParticles(), oldInstance.shouldShowIcon()));
+                return true;
             }
         }
+
+        return false;
     }
 
     public static RegistryEntry.Reference<StatusEffect> getDraconicOmenEntry(World world) {

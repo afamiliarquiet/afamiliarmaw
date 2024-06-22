@@ -25,7 +25,7 @@ public abstract class MawPosesPlayerEntityRendererMixin {
                     cir.setReturnValue(BipedEntityModel.ArmPose.TOOT_HORN);
                 }
             } else if (player instanceof MawBearer mawBearer && mawBearer.magnificent_maw$isBreathing()
-                    && MawUtils.isHoldingIgnition(player) && MawUtils.isFuelled(player)) {
+                    && MawUtils.isHoldingIgnition(player, hand) && MawUtils.isFuelled(player)) {
                 // *holds up torch*
                 cir.setReturnValue(BipedEntityModel.ArmPose.TOOT_HORN);
             }
