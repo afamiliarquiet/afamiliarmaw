@@ -13,7 +13,7 @@ import static io.github.afamiliarquiet.MagnificentMaw.id;
 public class MawEntities {
     public static final Identifier BREATH_PROJECTILE_ID = id("breath_projectile");
     public static final EntityType<BreathProjectileEntity> BREATH_PROJECTILE_TYPE = EntityType.Builder
-            .<BreathProjectileEntity>create(BreathProjectileEntity::new, SpawnGroup.MISC)
+            .<BreathProjectileEntity>create(BreathProjectileEntity::create, SpawnGroup.MISC)
             .dimensions(0.05f, 0.05f)
             .maxTrackingRange(4).trackingTickInterval(Integer.MAX_VALUE)
             .build();

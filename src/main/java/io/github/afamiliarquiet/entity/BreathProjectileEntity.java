@@ -24,31 +24,43 @@ import java.util.List;
 
 public class BreathProjectileEntity extends ThrownEntity {
     private static final int MAX_AGE = 13;
-    private final List<StatusEffectInstance> statusEffects;
     private static final TrackedData<List<ParticleEffect>> POTION_SWIRLS = DataTracker.registerData(BreathProjectileEntity.class, TrackedDataHandlerRegistry.PARTICLE_LIST);
+    private static final TrackedData<Float> BREATH_SIZE_SCALE = DataTracker.registerData(BreathProjectileEntity.class, TrackedDataHandlerRegistry.FLOAT);
+    private final List<StatusEffectInstance> statusEffects;
 
     protected BreathProjectileEntity(EntityType<? extends ThrownEntity> entityType, World world) {
         super(entityType, world);
         this.statusEffects = List.of();
+        this.setScale(1f);
     }
 
     @SuppressWarnings("unused") // nyeh. it's maybe used by /summon or something... it stays.
     protected BreathProjectileEntity(EntityType<? extends ThrownEntity> type, double x, double y, double z, World world) {
         super(type, x, y, z, world);
         this.statusEffects = List.of();
+        this.setScale(1f);
     }
 
-    public BreathProjectileEntity(LivingEntity owner, World world) {
+    public BreathProjectileEntity(LivingEntity owner, World world, double scale) {
         super(MawEntities.BREATH_PROJECTILE_TYPE, owner, world);
         this.statusEffects = owner.getStatusEffects()
                 .stream().filter((statusEffect)-> !(statusEffect.getEffectType().matchesId(MawEntities.DRACONIC_OMEN_STATUS_EFFECT_ID)))
                 .toList();
         updateSwirls();
+        this.setScale((float) scale);
     }
 
     private void updateSwirls() {
         List<ParticleEffect> list = this.statusEffects.stream().filter(StatusEffectInstance::shouldShowParticles).map(StatusEffectInstance::createParticle).toList();
         this.dataTracker.set(POTION_SWIRLS, list);
+    }
+
+    private void setScale(float scale) {
+        this.dataTracker.set(BREATH_SIZE_SCALE, scale);
+    }
+
+    private float getScale() {
+        return this.dataTracker.get(BREATH_SIZE_SCALE);
     }
 
     @Override
@@ -68,7 +80,7 @@ public class BreathProjectileEntity extends ThrownEntity {
 
             updateSwirls();
         }
-
+        this.setScale(nbt.getFloat("breath_size_scale"));
     }
 
     @Override
@@ -83,11 +95,13 @@ public class BreathProjectileEntity extends ThrownEntity {
 
             nbt.put("active_effects", nbtList);
         }
+        nbt.putFloat("breath_size_scale", this.getScale());
     }
 
     @Override
     protected void initDataTracker(DataTracker.Builder builder) {
         builder.add(POTION_SWIRLS, List.of());
+        builder.add(BREATH_SIZE_SCALE, 1.0f);
     }
 
     @Override
@@ -122,7 +136,7 @@ public class BreathProjectileEntity extends ThrownEntity {
 
     @Override
     public double getGravity() {
-        return -0.015;
+        return -0.015 * this.getScale();
     }
 
     @Override
@@ -179,7 +193,7 @@ public class BreathProjectileEntity extends ThrownEntity {
     public EntityDimensions getDimensions(EntityPose pose) {
         // bigger... BIGGER (vwoosh)
         float agePercent = this.age / (float) MAX_AGE;
-        float size = agePercent * agePercent + 0.05f;
+        float size = this.getScale() * (agePercent * agePercent + 0.05f);
         return EntityDimensions.changing(size, size);
     }
 
@@ -192,5 +206,9 @@ public class BreathProjectileEntity extends ThrownEntity {
         if (!this.getWorld().isClient && hitResult.getType().equals(HitResult.Type.BLOCK)) {
             this.discard();
         }
+    }
+
+    public static BreathProjectileEntity create(EntityType<? extends ThrownEntity> entity, World world) {
+        return new BreathProjectileEntity(entity, world);
     }
 }

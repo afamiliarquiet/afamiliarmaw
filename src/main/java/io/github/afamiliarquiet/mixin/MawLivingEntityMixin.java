@@ -6,6 +6,7 @@ import io.github.afamiliarquiet.util.MawBearer;
 import io.github.afamiliarquiet.util.MawUtils;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.data.DataTracker;
@@ -106,9 +107,12 @@ public abstract class MawLivingEntityMixin extends Entity implements MawBearer {
         } else {
             if (magnificent_maw$isBreathing() && MawUtils.canBreathe(meWhenImLiving)) {
                 if (consumeDraconicOmen(meWhenImLiving) || isDraconicTfed(meWhenImLiving)) {
-                    BreathProjectileEntity breathProjectileEntity = new BreathProjectileEntity(meWhenImLiving, world);
-                    breathProjectileEntity.setVelocity(this, this.getPitch(), this.getHeadYaw(), 0.0F, 0.5F, 13F);
-                    breathProjectileEntity.setPosition(breathProjectileEntity.getPos().add(this.getRotationVector().multiply(0.5)).addRandom(this.random, 0.013f));
+                    EntityDimensions dims = meWhenImLiving.getDimensions(meWhenImLiving.getPose());
+                    float scaling = Math.max(dims.height(), dims.width()) / 1.8f;
+
+                    BreathProjectileEntity breathProjectileEntity = new BreathProjectileEntity(meWhenImLiving, world, scaling);
+                    breathProjectileEntity.setVelocity(this, this.getPitch(), this.getHeadYaw(), 0.0F, 0.5F * scaling, 13F);
+                    breathProjectileEntity.setPosition(breathProjectileEntity.getPos().add(this.getRotationVector().multiply(0.5 * scaling)).addRandom(this.random, 0.013f * scaling));
                     world.spawnEntity(breathProjectileEntity);
 
                     Vec3d p = this.getPos();
