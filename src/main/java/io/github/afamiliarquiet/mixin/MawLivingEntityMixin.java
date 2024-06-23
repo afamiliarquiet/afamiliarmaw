@@ -107,7 +107,7 @@ public abstract class MawLivingEntityMixin extends Entity implements MawBearer {
             if (magnificent_maw$isBreathing() && MawUtils.canBreathe(meWhenImLiving)) {
                 if (consumeDraconicOmen(meWhenImLiving) || isDraconicTfed(meWhenImLiving)) {
                     BreathProjectileEntity breathProjectileEntity = new BreathProjectileEntity(meWhenImLiving, world);
-                    breathProjectileEntity.setVelocity(this, this.getPitch(), this.getYaw(), 0.0F, 0.5F, 13F);
+                    breathProjectileEntity.setVelocity(this, this.getPitch(), this.getHeadYaw(), 0.0F, 0.5F, 13F);
                     breathProjectileEntity.setPosition(breathProjectileEntity.getPos().add(this.getRotationVector().multiply(0.5)).addRandom(this.random, 0.013f));
                     world.spawnEntity(breathProjectileEntity);
 
