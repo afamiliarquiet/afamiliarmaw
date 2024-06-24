@@ -63,7 +63,7 @@ public abstract class SwordSwallowingRendererMixin<T extends PlayerEntity, M ext
             matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(handedSign * 90f));
             matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(0f));
 
-            float prcRemaining = entity.getItemUseTimeLeft() / 31f;
+            float prcRemaining = (float) entity.getItemUseTimeLeft() / MagnificentMaw.TOTALLY_UNIQUE_TO_SWALLOWABLE_USE_TIME;
             // x: down/up on face, y: in/out, z: left/right on face
             matrices.translate(
                     handedSign * ((2 - pitchPercent) * -.075),
