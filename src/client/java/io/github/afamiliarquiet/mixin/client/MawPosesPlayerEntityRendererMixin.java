@@ -20,7 +20,8 @@ public abstract class MawPosesPlayerEntityRendererMixin {
         ItemStack itemStack = player.getStackInHand(hand);
 
         if (!itemStack.isEmpty()) {
-            if (player.getActiveHand() == hand && player.getItemUseTimeLeft() > 0) {
+            if (player.getActiveHand() == hand && player.getItemUseTimeLeft() > 0
+                    && itemStack.getMaxUseTime(player) == MagnificentMaw.TOTALLY_UNIQUE_TO_SWALLOWABLE_USE_TIME) {
                 if (itemStack.isIn(MagnificentMaw.SWORDLY_SWALLOWABLE)) {
                     cir.setReturnValue(BipedEntityModel.ArmPose.TOOT_HORN);
                 }

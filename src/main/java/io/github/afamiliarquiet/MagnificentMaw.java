@@ -29,6 +29,8 @@ public class MagnificentMaw implements ModInitializer {
 	public static final TagKey<Item> EXTRANATURAL_REPELLENT = TagKey.of(RegistryKeys.ITEM, id("extranatural_repellent"));
 	public static final TagKey<Item> SWORDLY_SWALLOWABLE = TagKey.of(RegistryKeys.ITEM, id("swordly_swallowable"));
 
+	public static int TOTALLY_UNIQUE_TO_SWALLOWABLE_USE_TIME = 31;
+
 	public static Identifier id(String name) {
 		return Identifier.of(MOD_ID, name);
 	}

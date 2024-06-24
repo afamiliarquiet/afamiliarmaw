@@ -63,7 +63,8 @@ public abstract class ChompableItemMixin {
     @Inject(at = @At("TAIL"), method = "getMaxUseTime", cancellable = true)
     public void getMaxUseTime(ItemStack stack, LivingEntity user, CallbackInfoReturnable<Integer> cir) {
         if (stack.isIn(MagnificentMaw.SWORDLY_SWALLOWABLE)) {
-            cir.setReturnValue(32); // standard use time.. its ok don't worry about it it's fine relax more numbers more magic
+            // not quite standard use time! i'm using this to cheat for detecting if the use is actually eating and not whatever else an item might do. like twirl.
+            cir.setReturnValue(MagnificentMaw.TOTALLY_UNIQUE_TO_SWALLOWABLE_USE_TIME);
         }
     }
 

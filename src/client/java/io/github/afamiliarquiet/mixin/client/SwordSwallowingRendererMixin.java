@@ -43,7 +43,8 @@ public abstract class SwordSwallowingRendererMixin<T extends PlayerEntity, M ext
     // relies on the item using the handheld model. if it doesn't... it's gonna be funky. don't do that.
     @Inject(at = @At("HEAD"), method = "renderItem", cancellable = true)
     private void renderItem(LivingEntity entity, ItemStack stack, ModelTransformationMode transformationMode, Arm arm, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-        if (stack.isIn(MagnificentMaw.SWORDLY_SWALLOWABLE) && entity.getActiveItem() == stack && entity.getItemUseTimeLeft() > 0) {
+        if (stack.isIn(MagnificentMaw.SWORDLY_SWALLOWABLE) && entity.getActiveItem() == stack && entity.getItemUseTimeLeft() > 0
+                && stack.getMaxUseTime(entity) == MagnificentMaw.TOTALLY_UNIQUE_TO_SWALLOWABLE_USE_TIME) {
             // oh good lird i have to deal with quats now
 
             matrices.push();
