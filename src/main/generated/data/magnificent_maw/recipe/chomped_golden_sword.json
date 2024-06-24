@@ -1,0 +1,12 @@
+{
+  "type": "magnificent_maw:sword_swallowing",
+  "nutrition": 7,
+  "result": {
+    "count": 1,
+    "id": "magnificent_maw:chomped_golden_sword"
+  },
+  "saturationModifier": 1.5,
+  "swallowable": {
+    "item": "minecraft:golden_sword"
+  }
+}

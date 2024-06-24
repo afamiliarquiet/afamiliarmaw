@@ -1,0 +1,12 @@
+{
+  "type": "magnificent_maw:sword_swallowing",
+  "nutrition": 12,
+  "result": {
+    "count": 1,
+    "id": "magnificent_maw:chomped_diamond_sword"
+  },
+  "saturationModifier": 0.3,
+  "swallowable": {
+    "item": "minecraft:diamond_sword"
+  }
+}

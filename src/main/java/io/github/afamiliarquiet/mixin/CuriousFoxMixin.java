@@ -1,5 +1,6 @@
 package io.github.afamiliarquiet.mixin;
 
+import io.github.afamiliarquiet.MagnificentMaw;
 import io.github.afamiliarquiet.item.MawItems;
 import io.github.afamiliarquiet.util.MawBearer;
 import net.minecraft.component.DataComponentTypes;
@@ -37,7 +38,7 @@ public abstract class CuriousFoxMixin extends AnimalEntity {
 
     @Inject(at = @At("TAIL"), method = "canEat", cancellable = true)
     private void canEat(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
-        if (stack.isOf(MawItems.CURIOUS_VIAL)) {
+        if (stack.isOf(MawItems.CURIOUS_VIAL) || stack.isIn(MagnificentMaw.SWORDLY_SWALLOWABLE)) {
             cir.setReturnValue(true);
         }
     }

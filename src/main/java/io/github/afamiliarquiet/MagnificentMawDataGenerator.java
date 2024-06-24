@@ -1,21 +1,28 @@
 package io.github.afamiliarquiet;
 
 import io.github.afamiliarquiet.entity.MawEntities;
+import io.github.afamiliarquiet.item.ChompRecipe;
 import io.github.afamiliarquiet.item.MawItems;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.ItemModelGenerator;
 import net.minecraft.data.client.Models;
+import net.minecraft.data.server.recipe.RecipeExporter;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.RegistryWrapper;
 
 import java.util.concurrent.CompletableFuture;
+
+import static io.github.afamiliarquiet.MagnificentMaw.id;
 
 public class MagnificentMawDataGenerator implements DataGeneratorEntrypoint {
 	@Override
@@ -25,9 +32,13 @@ public class MagnificentMawDataGenerator implements DataGeneratorEntrypoint {
 		pack.addProvider(MawEnglishLanguageGenerator::new);
 		pack.addProvider(MawMeowishLanguageGenerator::new);
 		//pack.addProvider(MawJapaneseLanguageGenerator::new);
+
 		pack.addProvider(MawModelGenerator::new);
+
 		pack.addProvider(MawEnchantmentTagGenerator::new);
 		pack.addProvider(MawItemTagGenerator::new);
+
+		pack.addProvider(MawRecipeGenerator::new);
 	}
 
 	private static class MawEnglishLanguageGenerator extends FabricLanguageProvider {
@@ -175,7 +186,42 @@ public class MagnificentMawDataGenerator implements DataGeneratorEntrypoint {
 					.add(Items.IRON_SWORD)
 					.add(Items.GOLDEN_SWORD)
 					.add(Items.DIAMOND_SWORD)
-					.add(Items.NETHERITE_SWORD);
+					.add(Items.NETHERITE_SWORD)
+					.add(Items.BLAZE_ROD)
+					.add(Items.STICK);
+		}
+	}
+
+	private static class MawRecipeGenerator extends FabricRecipeProvider {
+		public MawRecipeGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+			super(output, registriesFuture);
+		}
+
+		@Override
+		public void generate(RecipeExporter exporter) {
+			blastificateTheCode(exporter, "chomped_wooden_sword",
+					3, 1.0f, Items.WOODEN_SWORD, MawItems.CHOMPED_WOODEN_SWORD);
+			blastificateTheCode(exporter, "chomped_stone_sword",
+					6, 0f, Items.STONE_SWORD, MawItems.CHOMPED_STONE_SWORD);
+			blastificateTheCode(exporter, "chomped_iron_sword",
+					8, 0.5f, Items.IRON_SWORD, MawItems.CHOMPED_IRON_SWORD);
+			blastificateTheCode(exporter, "chomped_golden_sword",
+					7, 1.5f, Items.GOLDEN_SWORD, MawItems.CHOMPED_GOLDEN_SWORD);
+			blastificateTheCode(exporter, "chomped_diamond_sword",
+					12, 0.3f, Items.DIAMOND_SWORD, MawItems.CHOMPED_DIAMOND_SWORD);
+			blastificateTheCode(exporter, "chomped_netherite_sword",
+					13, 1.3f, Items.NETHERITE_SWORD, MawItems.CHOMPED_NETHERITE_SWORD);
+		}
+
+		private void blastificateTheCode(RecipeExporter exporter, String idString, int nutrition, float saturationModifier, Item swallowable, Item result) {
+			exporter.accept(
+					id(idString),
+					new ChompRecipe(nutrition,
+							saturationModifier,
+							Ingredient.ofItems(swallowable),
+							result.getDefaultStack()),
+					null
+			);
 		}
 	}
 }

@@ -1,0 +1,12 @@
+{
+  "type": "magnificent_maw:sword_swallowing",
+  "nutrition": 6,
+  "result": {
+    "count": 1,
+    "id": "magnificent_maw:chomped_stone_sword"
+  },
+  "saturationModifier": 0.0,
+  "swallowable": {
+    "item": "minecraft:stone_sword"
+  }
+}

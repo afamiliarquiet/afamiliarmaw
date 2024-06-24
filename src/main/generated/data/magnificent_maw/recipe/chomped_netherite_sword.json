@@ -1,0 +1,12 @@
+{
+  "type": "magnificent_maw:sword_swallowing",
+  "nutrition": 13,
+  "result": {
+    "count": 1,
+    "id": "magnificent_maw:chomped_netherite_sword"
+  },
+  "saturationModifier": 1.3,
+  "swallowable": {
+    "item": "minecraft:netherite_sword"
+  }
+}

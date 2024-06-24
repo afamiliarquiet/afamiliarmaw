@@ -1,0 +1,12 @@
+{
+  "type": "magnificent_maw:sword_swallowing",
+  "nutrition": 8,
+  "result": {
+    "count": 1,
+    "id": "magnificent_maw:chomped_iron_sword"
+  },
+  "saturationModifier": 0.5,
+  "swallowable": {
+    "item": "minecraft:iron_sword"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "magnificent_maw:sword_swallowing",
+  "nutrition": 3,
+  "result": {
+    "count": 1,
+    "id": "magnificent_maw:chomped_wooden_sword"
+  },
+  "saturationModifier": 1.0,
+  "swallowable": {
+    "item": "minecraft:wooden_sword"
+  }
+}

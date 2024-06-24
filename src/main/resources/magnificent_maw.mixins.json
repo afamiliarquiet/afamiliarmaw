@@ -3,8 +3,9 @@
   "package": "io.github.afamiliarquiet.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "MawLivingEntityMixin",
-    "CuriousFoxMixin"
+    "ChompableItemMixin",
+    "CuriousFoxMixin",
+    "MawLivingEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
