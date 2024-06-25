@@ -41,6 +41,50 @@ if you swallow an iron sword, that draconic transformation is reversed, and you'
 
 ---
 
+## datapackery
+
+sword swallowing is, very sensibly, using crafting recipes.
+(it feels a little silly but it _is_ more sensible than the first time i used recipes for multiblock patterns registered in gameplay.)
+
+maw uses a few different tags! 
+* ignition source items (fiery_items)
+* enchantments that turn an item into an ignition source (fiery_enchantments)
+* items that can be chewed on and "swallowed" like a sword (swordly_swallowable) -
+  these should generally only be items with a handheld model, like swords and sticks and blaze rods and NOT breeze rods (???)
+* items that, when eaten*, spook away the extranatural bit inside of you :( (extranatural_repellent) - 
+  i think this would apply to normal foods too, it's not dependent on sword swallowing. i think.
+
+then there's the sword swallowing recipes. for reference, here's chomped_wooden_sword:
+
+```
+{
+  "type": "magnificent_maw:sword_swallowing",
+  "nutrition": 3,
+  "result": {
+    "count": 1,
+    "id": "magnificent_maw:chomped_wooden_sword"
+  },
+  "saturationModifier": 1.0,
+  "swallowable": {
+    "item": "minecraft:wooden_sword"
+  }
+}
+```
+
+the result is an itemstack, and the swallowable is an ingredient, using the same stuff other minecraft recipes do.
+
+nutrition is hunger (in vanilla, max 20 - much like health), and saturationModifier i think is multiplied onto nutrition to get saturation?
+
+adding an item as the swallowable part of a recipe will automatically make it edible** in game, with the provided food values,
+and then when eaten it will be replaced with the result item, copying name and enchants and everything else. all the components.
+
+** it also has to be in the swordly_swallowable tag. that's important too. swordly swallowable starts the eating, recipe finishes it.
+
+i could change that, if there's something you want to do that requires sword swallowing but not swordly swallowing.
+seems reasonably fixy. 
+
+---
+
 ## etc.
 
 i probably wouldn't recommend using this mod directly outside of ModFest: Carnival,
