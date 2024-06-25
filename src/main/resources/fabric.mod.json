@@ -9,7 +9,8 @@
 	],
 	"contact": {
 		"homepage": "https://github.com/afamiliarquiet/magnificent-maw",
-		"sources": "https://github.com/afamiliarquiet/magnificent-maw"
+		"sources": "https://github.com/afamiliarquiet/magnificent-maw",
+		"issues": "https://github.com/afamiliarquiet/magnificent-maw/issues"
 	},
 	"license": "MIT",
 	"icon": "assets/magnificent_maw/icon.png",
