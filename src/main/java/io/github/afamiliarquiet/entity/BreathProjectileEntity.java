@@ -20,6 +20,7 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BreathProjectileEntity extends ThrownEntity {
@@ -30,22 +31,22 @@ public class BreathProjectileEntity extends ThrownEntity {
 
     protected BreathProjectileEntity(EntityType<? extends ThrownEntity> entityType, World world) {
         super(entityType, world);
-        this.statusEffects = List.of();
+        this.statusEffects = new ArrayList<>();
         this.setScale(1f);
     }
 
     @SuppressWarnings("unused") // nyeh. it's maybe used by /summon or something... it stays.
     protected BreathProjectileEntity(EntityType<? extends ThrownEntity> type, double x, double y, double z, World world) {
         super(type, x, y, z, world);
-        this.statusEffects = List.of();
+        this.statusEffects = new ArrayList<>();
         this.setScale(1f);
     }
 
     public BreathProjectileEntity(LivingEntity owner, World world, double scale) {
         super(MawEntities.BREATH_PROJECTILE_TYPE, owner, world);
-        this.statusEffects = owner.getStatusEffects()
+        this.statusEffects = new ArrayList<>(owner.getStatusEffects()
                 .stream().filter((statusEffect)-> !(statusEffect.getEffectType().matchesId(MawEntities.DRACONIC_OMEN_STATUS_EFFECT_ID)))
-                .toList();
+                .toList());
         updateSwirls();
         this.setScale((float) scale);
     }
@@ -73,7 +74,6 @@ public class BreathProjectileEntity extends ThrownEntity {
                 NbtCompound nbtCompound = nbtList.getCompound(i);
                 StatusEffectInstance statusEffectInstance = StatusEffectInstance.fromNbt(nbtCompound);
                 if (statusEffectInstance != null) {
-                    //noinspection DataFlowIssue nyeh!
                     this.statusEffects.add(statusEffectInstance);
                 }
             }
