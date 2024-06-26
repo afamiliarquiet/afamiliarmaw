@@ -4,20 +4,17 @@ import io.github.afamiliarquiet.MagnificentMaw;
 import io.github.afamiliarquiet.item.MawItems;
 import io.github.afamiliarquiet.util.MawBearer;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.FoxEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(FoxEntity.class)
@@ -29,10 +26,11 @@ public abstract class CuriousFoxMixin extends AnimalEntity {
         super(entityType, world);
     }
 
-    @Inject(at = @At("TAIL"), method = "initialize")
-    private void initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, EntityData entityData, CallbackInfoReturnable<EntityData> cir) {
+    @Inject(at = @At("TAIL"), method = "tick")
+    private void tick(CallbackInfo ci) {
         if ((FoxEntity)(Object)this instanceof MawBearer thisButWithABigMaw) {
-            thisButWithABigMaw.magnificent_maw$setBreathing(true);
+            // breathe when sitting/walking i think?
+            thisButWithABigMaw.magnificent_maw$setBreathing(!(this.isRollingHead() || this.isSitting() || this.isSleeping()));
         }
     }
 
@@ -50,4 +48,12 @@ public abstract class CuriousFoxMixin extends AnimalEntity {
             cir.setReturnValue(true);
         }
     }
+
+    @Shadow
+    public abstract boolean isRollingHead();
+    @Shadow
+    public abstract boolean isSitting();
+
+    @Shadow
+    public abstract boolean isSleeping();
 }
