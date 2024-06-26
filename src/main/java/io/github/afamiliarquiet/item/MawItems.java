@@ -34,7 +34,7 @@ public class MawItems {
     public static final Item CHOMPED_IRON_SWORD = new Item(new Item.Settings().maxCount(1));
     public static final Item CHOMPED_GOLDEN_SWORD = new Item(new Item.Settings().maxCount(1));
     public static final Item CHOMPED_DIAMOND_SWORD = new Item(new Item.Settings().maxCount(1));
-    public static final Item CHOMPED_NETHERITE_SWORD = new Item(new Item.Settings().maxCount(1));
+    public static final Item CHOMPED_NETHERITE_SWORD = new Item(new Item.Settings().maxCount(1).fireproof());
 
     public static final Identifier CHOMP_RECIPE_ID = id("sword_swallowing");
     public static final RecipeType<ChompRecipe> CHOMP_RECIPE_TYPE = new RecipeType<>() {
