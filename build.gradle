@@ -16,10 +16,14 @@ repositories {
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
-	maven { url 'https://maven.proxyfox.dev/' } // Switchy
-	maven { url 'https://repo.sleeping.town/' } // Keleido
-	maven { url "https://maven.nucleoid.xyz/" } // Server Trans
-	maven { url 'https://maven.wispforest.io' } // owo lib
+//	maven { url 'https://maven.proxyfox.dev/' } // Switchy
+//	maven { url 'https://repo.sleeping.town/' } // Keleido
+//	maven { url "https://maven.nucleoid.xyz/" } // Server Trans
+//	maven { url 'https://maven.wispforest.io' } // owo lib
+//	maven {
+//		name = "TerraformersMC"
+//		url = "https://maven.terraformersmc.com/"
+//	}
 }
 
 loom {
@@ -49,6 +53,8 @@ dependencies {
 
 	// Compat
 	//modCompileOnly "folk.sisby:switchy-core:2.8.2+1.20.4" // gradle gets made about malformed markup when i try :\
+//	modCompileOnly "dev.emi:emi-fabric:1.1.7+1.21:api"
+//	modLocalRuntime "dev.emi:emi-fabric:1.1.7+1.21"
 }
 
 processResources {
