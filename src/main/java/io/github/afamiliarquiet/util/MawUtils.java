@@ -7,6 +7,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.RegistryKeys;
@@ -35,8 +36,12 @@ public class MawUtils {
     }
 
     public static boolean isHoldingIgnition(LivingEntity entity, Hand hand) {
-        return entity.getStackInHand(hand).isIn(MagnificentMaw.FIERY_ITEMS)
-                || EnchantmentHelper.hasAnyEnchantmentsIn(entity.getStackInHand(hand), MagnificentMaw.FIERY_ENCHANTMENTS);
+        return isIgnition(entity.getStackInHand(hand));
+    }
+
+    public static boolean isIgnition(ItemStack stack) {
+        return stack.isIn(MagnificentMaw.FIERY_ITEMS)
+                || EnchantmentHelper.hasAnyEnchantmentsIn(stack, MagnificentMaw.FIERY_ENCHANTMENTS);
     }
 
     public static boolean isFuelled(LivingEntity entity) {

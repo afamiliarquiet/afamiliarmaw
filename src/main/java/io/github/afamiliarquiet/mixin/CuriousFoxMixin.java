@@ -3,6 +3,7 @@ package io.github.afamiliarquiet.mixin;
 import io.github.afamiliarquiet.MagnificentMaw;
 import io.github.afamiliarquiet.item.MawItems;
 import io.github.afamiliarquiet.util.MawBearer;
+import io.github.afamiliarquiet.util.MawUtils;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -30,7 +31,9 @@ public abstract class CuriousFoxMixin extends AnimalEntity {
     private void tick(CallbackInfo ci) {
         if ((FoxEntity)(Object)this instanceof MawBearer thisButWithABigMaw) {
             // breathe when sitting/walking i think?
-            thisButWithABigMaw.magnificent_maw$setBreathing(!(this.isRollingHead() || this.isSitting() || this.isSleeping()));
+            ItemStack itemStack = this.getEquippedStack(EquipmentSlot.MAINHAND);
+            thisButWithABigMaw.magnificent_maw$setBreathing(!(this.isRollingHead() || this.isSitting() || this.isSleeping())
+                    && (itemStack.isEmpty() || MawUtils.isIgnition(itemStack)));
         }
     }
 
