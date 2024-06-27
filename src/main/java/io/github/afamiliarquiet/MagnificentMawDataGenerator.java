@@ -140,12 +140,12 @@ public class MagnificentMawDataGenerator implements DataGeneratorEntrypoint {
 		public void generateItemModels(ItemModelGenerator itemModelGenerator) {
 			itemModelGenerator.register(MawItems.CURIOUS_VIAL, Models.GENERATED);
 
-			itemModelGenerator.register(MawItems.CHOMPED_WOODEN_SWORD, Models.GENERATED);
-			itemModelGenerator.register(MawItems.CHOMPED_STONE_SWORD, Models.GENERATED);
-			itemModelGenerator.register(MawItems.CHOMPED_IRON_SWORD, Models.GENERATED);
-			itemModelGenerator.register(MawItems.CHOMPED_GOLDEN_SWORD, Models.GENERATED);
-			itemModelGenerator.register(MawItems.CHOMPED_DIAMOND_SWORD, Models.GENERATED);
-			itemModelGenerator.register(MawItems.CHOMPED_NETHERITE_SWORD, Models.GENERATED);
+			itemModelGenerator.register(MawItems.CHOMPED_WOODEN_SWORD, Models.HANDHELD);
+			itemModelGenerator.register(MawItems.CHOMPED_STONE_SWORD, Models.HANDHELD);
+			itemModelGenerator.register(MawItems.CHOMPED_IRON_SWORD, Models.HANDHELD);
+			itemModelGenerator.register(MawItems.CHOMPED_GOLDEN_SWORD, Models.HANDHELD);
+			itemModelGenerator.register(MawItems.CHOMPED_DIAMOND_SWORD, Models.HANDHELD);
+			itemModelGenerator.register(MawItems.CHOMPED_NETHERITE_SWORD, Models.HANDHELD);
 		}
 	}
 
