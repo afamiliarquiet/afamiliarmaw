@@ -60,6 +60,7 @@ public class MagnificentMawDataGenerator implements DataGeneratorEntrypoint {
 			translationBuilder.add(MawItems.CHOMPED_DIAMOND_SWORD, "Diamond Sword..?");
 			translationBuilder.add(MawItems.CHOMPED_NETHERITE_SWORD, "Netherite Sword..?");
 
+			translationBuilder.add(MawEntities.BREATH_PROJECTILE_TYPE, "Fire Breath");
 			translationBuilder.add(MawEntities.DRACONIC_OMEN_STATUS_EFFECT, "Draconic Omen");
 
 			translationBuilder.add(MagnificentMaw.EXTRANATURAL_REPELLENT, "Extranatural Repellent");
@@ -91,6 +92,7 @@ public class MagnificentMawDataGenerator implements DataGeneratorEntrypoint {
 			translationBuilder.add(MawItems.CHOMPED_DIAMOND_SWORD, "shiny Swurd! still! prommy");
 			translationBuilder.add(MawItems.CHOMPED_NETHERITE_SWORD, "wuznt me...");
 
+			translationBuilder.add(MawEntities.BREATH_PROJECTILE_TYPE, "dragon BLAST!!1");
 			translationBuilder.add(MawEntities.DRACONIC_OMEN_STATUS_EFFECT, "Dargonz lookin!!");
 		}
 	}
