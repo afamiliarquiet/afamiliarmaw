@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class MawUtils {
     public static boolean canBreathe(LivingEntity entity) {
-        return isDraconicTfed(entity) || canBreatheNaturally(entity);
+        return (isDraconicTfed(entity) || canBreatheNaturally(entity)) && !entity.isSpectator();
     }
 
     public static boolean canBreatheNaturally(LivingEntity entity) {
