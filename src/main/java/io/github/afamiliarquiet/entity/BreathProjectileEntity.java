@@ -35,13 +35,6 @@ public class BreathProjectileEntity extends ThrownEntity {
         this.setScale(1f);
     }
 
-    @SuppressWarnings("unused") // nyeh. it's maybe used by /summon or something... it stays.
-    protected BreathProjectileEntity(EntityType<? extends ThrownEntity> type, double x, double y, double z, World world) {
-        super(type, x, y, z, world);
-        this.statusEffects = new ArrayList<>();
-        this.setScale(1f);
-    }
-
     public BreathProjectileEntity(LivingEntity owner, World world, double scale) {
         super(MawEntities.BREATH_PROJECTILE_TYPE, owner, world);
         this.statusEffects = new ArrayList<>(owner.getStatusEffects()
@@ -169,6 +162,7 @@ public class BreathProjectileEntity extends ThrownEntity {
 
         // dunno if these checks for fire/splash immunity are necessary but..
         // it's good to be respectful to the entity's wishes anyway
+        // would need to create my own damage type to properly add the attacker to the target's lastDamageSource
         if (!entity.isFireImmune()) {
             entity.setOnFireForTicks(beNice ? 13 : 20);
         }
