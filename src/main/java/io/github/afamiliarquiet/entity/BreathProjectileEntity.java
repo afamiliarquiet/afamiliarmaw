@@ -120,10 +120,10 @@ public class BreathProjectileEntity extends ThrownEntity {
             this.getWorld().playSound(null, p.x, p.y, p.z,
                     SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS,
                     0.5f, (this.getRandom().nextFloat() * 0.1f + 0.4f));
-        } else {
-            if (this.age > MAX_AGE) {
-                this.discard();
-            }
+        }
+
+        if (this.age > MAX_AGE) {
+            this.discard();
         }
     }
 
